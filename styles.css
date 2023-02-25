@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+img {
+    height: 30%;
+}
+
+h2 {
+    font-family: 'Playfair Display', serif;
+    color: white;
+}
