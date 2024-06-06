@@ -1,5 +1,0 @@
-name = "artyfycial"
-type = "webpack"
-account_id = "3f1a00c88b83d756c927685aa3686417"
-workers_dev = true
-pages_build_output_dir = "./dist/"
