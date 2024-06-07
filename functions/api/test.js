@@ -2,12 +2,14 @@ export async function onRequest(context) {
     try {
         console.log('Function triggered!');
 
+        console.log(context.env.DB)
+
         // Check if the DB binding exists
         if (!context.env.DB) {
             throw new Error("DB binding not found");
         }
 
-        const res = await context.env.DB.prepare("select * from artist;").all();
+        const res = await context.env.DB.prepare("SELECT * FROM artist;").all();
 
         // Check if the query was successful and results are available
         if (!res || !res.results) {
