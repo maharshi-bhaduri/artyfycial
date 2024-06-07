@@ -1,4 +1,6 @@
 export async function onRequest(event) {
     console.log('Function triggered!');
-    return new Response('Second functions says hello too!');
+    const res = await env.DB.prepare("select * from artist;").all()
+    const artists = res.results
+    return new Response(artists);
 }
