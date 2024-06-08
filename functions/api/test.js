@@ -9,7 +9,7 @@ export async function onRequest(context) {
             throw new Error("DB binding not found");
         }
 
-        const res = await context.env.DB.prepare("SELECT * FROM artist;").all();
+        const res = await context.env.DB.prepare("SELECT * FROM artist limit 10;").all();
 
         // Check if the query was successful and results are available
         if (!res || !res.results) {
