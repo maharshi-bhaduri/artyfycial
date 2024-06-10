@@ -7,7 +7,6 @@ import {
   signInWithGoogle,
   signOutFn,
   onAuthStateChanged,
-  getIdToken,
 } from "./utils/Firebase";
 function App() {
   const [showBtn, setShowBtn] = useState(false);
@@ -26,9 +25,7 @@ function App() {
       console.log(currTime);
     } catch (error) {
       console.log(error);
-      if (error.response.status == 401) {
-        getIdToken(true);
-      }
+
       return error.response.status;
     }
   };
