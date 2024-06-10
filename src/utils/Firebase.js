@@ -30,7 +30,7 @@ const signInWithGoogle = function () {
       localStorage.setItem("uid", res.user.uid);
     })
     .catch((error) => {
-      console.log(error + "im here");
+      console.log(error);
     });
 };
 
