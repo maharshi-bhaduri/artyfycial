@@ -5,17 +5,16 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  getIdToken,
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: process.env.FIREBASE_AUTHDOMAIN,
-  projectId: process.env.FIREBASE_PROJECTID,
-  storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGINGSENDERID,
-  appId: process.env.FIREBASE_APPID,
-  measurementId: process.env.FIREBASE_MEASUREMENTID,
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_FIREBASE_APPID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENTID,
 };
 
 // Initialize Firebase
@@ -31,7 +30,7 @@ const signInWithGoogle = function () {
       localStorage.setItem("uid", res.user.uid);
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error + "im here");
     });
 };
 
@@ -46,11 +45,4 @@ const signOutFn = function () {
     });
 };
 
-export {
-  auth,
-  provider,
-  onAuthStateChanged,
-  signOutFn,
-  signInWithGoogle,
-  getIdToken,
-};
+export { auth, provider, onAuthStateChanged, signOutFn, signInWithGoogle };
