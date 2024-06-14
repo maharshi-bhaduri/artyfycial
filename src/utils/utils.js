@@ -6,7 +6,7 @@ const getCurrenTime = async function () {
     uid: localStorage.getItem("uid"),
   };
   try {
-    const response = await axios.get("http://localhost:3000/api/getTime", {
+    const response = await axios.get(import.meta.env.VITE_APP_GET_TIME, {
       headers: headers,
     });
     const currTime = response.data.time;
