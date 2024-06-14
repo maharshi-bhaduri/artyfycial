@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import ImageUpload from "./ImageUpload";
 import "./App.css";
 import {
   auth,
@@ -8,28 +8,15 @@ import {
   signOutFn,
   onAuthStateChanged,
 } from "./utils/Firebase";
+import { getCurrenTime } from "./utils/utils";
 function App() {
   const [showBtn, setShowBtn] = useState(false);
-  let currTime;
-  const getCurrenTime = async function () {
-    const headers = {
-      "Content-Type": "Aaplication/json",
-      Authorization: localStorage.getItem("token"),
-      uid: localStorage.getItem("uid"),
-    };
-    try {
-      const response = await axios.get("http://localhost:3000/api/getTime", {
-        headers: headers,
-      });
-      currTime = response.data.time;
-      console.log(currTime);
-    } catch (error) {
-      console.log(error);
-
-      return error.response.status;
-    }
+  const [currTime, setCurrTime] = useState(null);
+  const handleGetTime = async function () {
+    const time = await getCurrenTime();
+    setCurrTime(time);
   };
-  //const currTime = getCurrenTime();
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -55,10 +42,11 @@ function App() {
       </div>
       {
         <div className="box">
-          <button onClick={getCurrenTime}>Get Current Time</button>
+          <button onClick={handleGetTime}>Get Current Time</button>
           {currTime && <div className="time">{currTime}</div>}
         </div>
       }
+      <ImageUpload />
     </>
   );
 }
