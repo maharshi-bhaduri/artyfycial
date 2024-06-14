@@ -17,7 +17,7 @@ function ImageUpload() {
     //console.log(formData.get("image"));
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/createImage",
+        import.meta.env.VITE_APP_CREATE_IMAGE,
         formData,
         {
           headers: headers,
