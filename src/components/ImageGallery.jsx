@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ImageGallery.css";
 
 const ImageGallery = () => {
     const [images, setImages] = useState([]);
@@ -22,13 +21,13 @@ const ImageGallery = () => {
     }, [lastUpdated]); // Re-fetch images when lastUpdated changes
 
     return (
-        <div className="images-container">
+        <div className="grid grid-cols-auto-fill min-w-[200px] gap-2">
             {images.map((file) => (
                 <img
                     key={file.name}
                     src={file.url}
                     alt={file.name}
-                    className="image-item"
+                    className="w-full h-48 object-cover rounded"
                 />
             ))}
         </div>
