@@ -1,0 +1,17 @@
+.images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    /* Responsive grid layout with a minimum column width of 200px */
+    gap: 10px;
+}
+
+.image-item {
+    width: 100%;
+    height: 200px;
+    /* Fixed height */
+    object-fit: cover;
+    border-radius: 10px;
+    /* Rounded corners */
+    filter: grayscale(100%);
+    opacity: 0.8;
+}

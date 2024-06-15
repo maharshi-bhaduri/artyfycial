@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ImageUpload from "./ImageUpload";
+import ImageGallery from "./ImageGallery";
 import "./App.css";
 import {
   auth,
@@ -9,9 +10,11 @@ import {
   onAuthStateChanged,
 } from "./utils/Firebase";
 import { getCurrenTime } from "./utils/utils";
+
 function App() {
   const [showBtn, setShowBtn] = useState(false);
   const [currTime, setCurrTime] = useState(null);
+
   const handleGetTime = async function () {
     const time = await getCurrenTime();
     setCurrTime(time);
@@ -21,10 +24,10 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        console.log(`user is logged in and his uid is ${uid}`);
+        console.log(`User is logged in and their UID is ${uid}`);
         setShowBtn(true);
       } else {
-        console.log("user is not logged in");
+        console.log("User is not logged in");
         setShowBtn(false);
       }
     });
@@ -40,13 +43,12 @@ function App() {
           SignOut
         </button>
       </div>
-      {
-        <div className="box">
-          <button onClick={handleGetTime}>Get Current Time</button>
-          {currTime && <div className="time">{currTime}</div>}
-        </div>
-      }
+      <div className="box">
+        <button onClick={handleGetTime}>Get Current Time</button>
+        {currTime && <div className="time">{currTime}</div>}
+      </div>
       <ImageUpload />
+      <ImageGallery />
     </>
   );
 }
