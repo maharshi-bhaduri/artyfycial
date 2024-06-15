@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codehelios/verify-tokenid": "^0.3.1",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
