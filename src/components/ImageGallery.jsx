@@ -3,7 +3,6 @@ import axios from "axios";
 
 const ImageGallery = () => {
     const [images, setImages] = useState([]);
-    const [lastUpdated, setLastUpdated] = useState(Date.now()); // State to track last updated timestamp
 
     const fetchImages = async () => {
         try {
@@ -18,18 +17,20 @@ const ImageGallery = () => {
 
     useEffect(() => {
         fetchImages(); // Fetch images on component mount
-    }, [lastUpdated]); // Re-fetch images when lastUpdated changes
+    }, []);
 
     return (
-        <div className="grid grid-cols-auto-fill min-w-[200px] gap-2">
-            {images.map((file) => (
-                <img
-                    key={file.name}
-                    src={file.url}
-                    alt={file.name}
-                    className="w-full h-48 object-cover rounded"
-                />
-            ))}
+        <div className="flex justify-end items-center">
+            <div className="grid grid-cols-3 gap-8 px-16">
+                {images.map((file) => (
+                    <img
+                        key={file.name}
+                        src={file.url}
+                        alt={file.name}
+                        className="w-48 h-48 object-cover rounded grayscale hover:grayscale-0 transition-all duration-500"
+                    />
+                ))}
+            </div>
         </div>
     );
 };
