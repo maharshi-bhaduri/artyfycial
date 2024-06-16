@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
             }
             else {
                 if (!allowedPaths.includes(location.pathname)) {
-                    navigate('/login');
+                    navigate('/');
                 }
             }
         });

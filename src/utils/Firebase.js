@@ -40,6 +40,7 @@ const signOutFn = function () {
       localStorage.clear();
       console.log("signed out");
     })
+
     .catch((error) => {
       console.log(error);
     });
