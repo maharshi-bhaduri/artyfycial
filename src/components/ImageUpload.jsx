@@ -3,6 +3,7 @@ import axios from "axios";
 
 function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isImgUploaded, setIsImgUploaded] = useState(false);
   const handleFileChange = (event) => {
     //console.log(event.target.files);
     setSelectedFile(event.target.files[0]);
@@ -23,6 +24,7 @@ function ImageUpload() {
           headers: headers,
         }
       );
+      setIsImgUploaded(true);
       console.log(
         "Image uploaded successfully and resposne is",
         JSON.stringify(response.data)
@@ -36,6 +38,7 @@ function ImageUpload() {
       <form action="" onSubmit={handleSubmit}>
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button type="submit">Upload Image</button>
+        {isImgUploaded && <div>Image has been uploaded successfully</div>}
       </form>
     </div>
   );
