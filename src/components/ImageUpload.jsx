@@ -18,7 +18,7 @@ function ImageUpload() {
     //console.log(formData.get("image"));
     try {
       const response = await axios.post(
-        import.meta.env.VITE_APP_CREATE_IMAGE,
+        import.meta.env.VITE_APP_ADD_IMAGE,
         formData,
         {
           headers: headers,
