@@ -7,8 +7,8 @@ export async function onRequest(context) {
             throw new Error("DB binding not found");
         }
 
-        // Extract artwork details from the request
-        const { artistId, title, date, description, active, path } = await context.request.json();
+        // Extract artwork details from the request with default values
+        const { artistId, title, uploadDate, description, isActive, path, isPublic = true, clickCount = 0 } = await context.request.json();
 
         // Check if required fields are provided
         if (!artistId || !title) {
@@ -17,13 +17,13 @@ export async function onRequest(context) {
 
         // Prepare the SQL statement for inserting a new artwork
         const statement = `
-            INSERT INTO artwork (artistId, title, date, description, active, path)
-            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT INTO artwork (artistId, title, uploadDate, description, isActive, path, isPublic, clickCount)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `;
 
         // Execute the SQL statement
         const res = await context.env.DB.prepare(statement)
-            .bind(artistId, title, date, description, active, path)
+            .bind(artistId, title, uploadDate, description, isActive, path, isPublic, clickCount)
             .run();
 
         // Check if the insertion was successful
