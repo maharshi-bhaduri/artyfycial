@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import ImageUpload from "../components/ImageUpload";
 import ImageGallery from "../components/ImageGallery";
 import { auth, signInWithGoogle, onAuthStateChanged } from "../utils/Firebase";
 import Navbar from "../components/Navbar";
+import { AuthContext } from "../utils/AuthContextProvider";
 
 export default function Home() {
   const [showBtn, setShowBtn] = useState(false);
@@ -15,19 +16,10 @@ export default function Home() {
     setCurrTime(time);
   };
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log(`User is logged in and their UID is ${uid}`);
-        setShowBtn(true);
-        navigate("/discover"); // Redirect to the home page after login
-      } else {
-        console.log("User is not logged in");
-        setShowBtn(false);
-      }
-    });
-  }, [navigate]);
+  const user = useContext(AuthContext); // refer this to use AuthContext value
+  if (user) {
+    console.log("user is: ", user);
+  }
 
   return (
     <div className="w-full h-full p-8 flex justify-around">

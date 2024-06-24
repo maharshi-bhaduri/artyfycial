@@ -20,6 +20,9 @@ const AuthProvider = ({ children }) => {
         user.getIdToken().then((token) => {
           Cookies.set("token", token);
         });
+        if (allowedPaths.includes(location.pathname)) {
+          navigate("/discover");
+        }
       } else {
         if (!allowedPaths.includes(location.pathname)) {
           navigate("/");
