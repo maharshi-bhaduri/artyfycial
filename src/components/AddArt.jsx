@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+
+import FileUpload from "./FileUpload";
 import axios from "axios";
 
-function ImageUpload() {
+export default function AddArt() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isImgUploaded, setIsImgUploaded] = useState(false);
   const handleFileChange = (event) => {
@@ -35,13 +37,14 @@ function ImageUpload() {
   };
   return (
     <div>
-      <form action="" onSubmit={handleSubmit}>
+      {/* <form action="" onSubmit={handleSubmit}>
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button type="submit">Upload Image</button>
         {isImgUploaded && <div>Image has been uploaded successfully</div>}
-      </form>
+      </form> */}
+      <div>
+        <FileUpload />
+      </div>
     </div>
   );
 }
-
-export default ImageUpload;
