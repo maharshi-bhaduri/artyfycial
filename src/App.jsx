@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { initializeLocalForage } from "./utils/localforageUtils";
 import { AuthProvider } from "./utils/AuthContextProvider";
-
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import Create from "./pages/Create";
