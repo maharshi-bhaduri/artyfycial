@@ -6,34 +6,31 @@ import { getAuth, onAuthStateChanged, onIdTokenChanged } from "firebase/auth";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const allowedPaths = ['/'];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const allowedPaths = ["/"];
 
-    useEffect(() => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                localStorage.setItem('displayName', user.displayName);
-                setUser(user);
-                user.getIdToken().then(
-                    (token) => {
-                        Cookies.set('token', token)
-                    }
-                )
-            }
-            else {
-                if (!allowedPaths.includes(location.pathname)) {
-                    navigate('/');
-                }
-            }
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem("displayName", user.displayName);
+        setUser(user);
+        user.getIdToken().then((token) => {
+          Cookies.set("token", token);
         });
+      } else {
+        if (!allowedPaths.includes(location.pathname)) {
+          navigate("/");
+        }
+      }
+    });
 
-        return () => unsubscribe(); // Unsubscribe from the auth state changes when component unmounts
-    }, []);
+    return () => unsubscribe(); // Unsubscribe from the auth state changes when component unmounts
+  }, []);
 
-    return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthProvider };
