@@ -1,9 +1,9 @@
-import AddArt from "../components/AddArt";
+import FileUpload from "../components/FileUpload";
 
 export default function Create() {
   return (
-    <div>
-      <AddArt />
+    <div className="w-full flex justify-center">
+      <FileUpload />
     </div>
   );
 }

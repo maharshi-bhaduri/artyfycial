@@ -14,7 +14,7 @@ export default function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <div className="h-screen flex flex-col ">
+        <div className="h-screen flex ">
           <Navbar />
           <div className="flex-grow overflow-auto mt-16 flex items-center">
             <Routes>
