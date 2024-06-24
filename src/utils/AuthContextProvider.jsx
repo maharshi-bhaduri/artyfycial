@@ -22,6 +22,9 @@ const AuthProvider = ({ children }) => {
                         Cookies.set('token', token)
                     }
                 )
+                if (allowedPaths.includes(location.pathname)) {
+                    navigate('/discover');
+                }
             }
             else {
                 if (!allowedPaths.includes(location.pathname)) {
