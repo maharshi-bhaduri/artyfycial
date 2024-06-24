@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ImageUpload from "../components/ImageUpload";
+
 import ImageGallery from "../components/ImageGallery";
 import { auth, signInWithGoogle, onAuthStateChanged } from "../utils/Firebase";
 import Navbar from "../components/Navbar";
