@@ -12,12 +12,6 @@ async function md5Hash(message) {
 
 
 export async function onRequest(context) {
-    const { request } = context;
-
-    // Handle CORS preflight requests
-    if (request.method === 'OPTIONS') {
-        return onRequestOptions();
-    }
     try {
         console.log('Function triggered: addUserData');
 
