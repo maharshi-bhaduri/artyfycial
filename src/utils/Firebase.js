@@ -6,6 +6,8 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import axios from "axios";
+
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -22,16 +24,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const signInWithGoogle = function () {
-  signInWithPopup(auth, provider)
-    .then((res) => {
-      console.log(res);
-      localStorage.setItem("token", res._tokenResponse.idToken);
-      localStorage.setItem("uid", res.user.uid);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const signInWithGoogle = async function () {
+  try {
+    const res = await signInWithPopup(auth, provider);
+    console.log(res);
+    localStorage.setItem("token", res._tokenResponse.idToken);
+    localStorage.setItem("uid", res.user.uid);
+
+    // Prepare data for the API call
+    const userData = {
+      uid: res.user.uid,
+      firstName: res.user.displayName.split(' ')[0],
+      lastName: res.user.displayName.split(' ').slice(1).join(' '),
+    };
+
+    // Make the PUT API call
+    const apiResponse = await axios.put(import.meta.env.VITE_APP_ADD_USER, userData);
+    console.log('API Response:', apiResponse.data);
+    localStorage.setItem("userId", apiResponse.data.userId);
+
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const signOutFn = function () {
