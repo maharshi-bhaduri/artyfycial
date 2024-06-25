@@ -21,7 +21,6 @@ export async function onRequest(context) {
         }
 
         // Extract data from the request
-        console.log(context)
         const { uid, firstName, lastName } = await context.request.json();
 
         if (!uid || !firstName || !lastName) {
