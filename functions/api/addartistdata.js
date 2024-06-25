@@ -1,5 +1,5 @@
-// import { allowCors } from "../utils/utils.js";
 import { allowCors, buildResponse } from "../utils/utils";
+
 
 async function md5Hash(message) {
     const msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
@@ -10,9 +10,14 @@ async function md5Hash(message) {
     return hashHex;
 }
 
-// const onRequest = async (context) => {
-export async function onRequest(context) {
 
+export async function onRequest(context) {
+    const { request } = context;
+
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+        return onRequestOptions();
+    }
     try {
         console.log('Function triggered: addUserData');
 
@@ -22,6 +27,7 @@ export async function onRequest(context) {
         }
 
         // Extract data from the request
+        console.log(context)
         const { uid, firstName, lastName } = await context.request.json();
 
         if (!uid || !firstName || !lastName) {

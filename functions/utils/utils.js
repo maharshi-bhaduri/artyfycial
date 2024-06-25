@@ -20,11 +20,27 @@ export const onRequestOptions = async () => {
     });
 };
 
-export async function allowCors(context) {
-    const { request } = context;
 
-    // Handle CORS preflight requests
-    if (request.method === 'OPTIONS') {
-        return onRequestOptions();
+const allowCors = (fn) => async (context) => {
+    try {
+        const { request } = context;
+
+        // Handle CORS preflight requests
+        if (request.method === 'OPTIONS') {
+            return onRequestOptions();
+        }
+    }
+    catch (error) {
+        console.error("An error occurred: ", error);
+        return buildResponse(500, { message: "CORS error" })
+    }
+    try {
+        await fn(context);
+    }
+    catch (error) {
+        console.error("An error occurred: ", error);
+        return;
     }
 }
+
+export { allowCors }
