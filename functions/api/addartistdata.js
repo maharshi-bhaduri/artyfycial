@@ -1,5 +1,5 @@
-// import { allowCors } from "../utils/utils.js";
 import { allowCors, buildResponse } from "../utils/utils";
+
 
 async function md5Hash(message) {
     const msgUint8 = new TextEncoder().encode(message); // encode as (utf-8) Uint8Array
@@ -10,9 +10,8 @@ async function md5Hash(message) {
     return hashHex;
 }
 
-// const onRequest = async (context) => {
-export async function onRequest(context) {
 
+export async function onRequest(context) {
     try {
         console.log('Function triggered: addUserData');
 
