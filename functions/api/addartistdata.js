@@ -11,7 +11,7 @@ async function md5Hash(message) {
 }
 
 
-export async function onRequest(context) {
+export async function onRequestPost(context) {
     try {
         console.log('Function triggered: addUserData');
 
@@ -69,4 +69,4 @@ export async function onRequest(context) {
     }
 };
 
-export default allowCors(onRequest);
+export default allowCors(onRequestPost);

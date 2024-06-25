@@ -39,7 +39,7 @@ const signInWithGoogle = async function () {
     };
 
     // Make the PUT API call
-    const apiResponse = await axios.put(import.meta.env.VITE_APP_ADD_USER, userData);
+    const apiResponse = await axios.post(import.meta.env.VITE_APP_ADD_USER, userData);
     console.log('API Response:', apiResponse.data);
     localStorage.setItem("userId", apiResponse.data.userId);
 
