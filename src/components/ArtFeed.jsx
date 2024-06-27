@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import ArtFeedItem from './ArtFeedItem';
 
+const fetchArtfeed = async () => {
+    const response = await axios.get(import.meta.env.VITE_APP_GET_FEED);
+    const artworkList = response.data['artworks'];
+    if (Array.isArray(artworkList)) {
+        return artworkList;
+    } else {
+        throw new Error('API response is not an array');
+    }
+};
+
 const ArtFeed = () => {
-    const [artfeed, setArtfeed] = useState([]);
+    const { data: artfeed, error, isLoading } = useQuery('artfeed', fetchArtfeed,
+        {
+            staleTime: 1000 * 60 * 5
+        }
+    );
 
-    useEffect(() => {
-        const fetchArtfeed = async () => {
-            try {
-                const response = await axios.get(import.meta.env.VITE_APP_GET_FEED);
-                const artworkList = response.data['artworks'];
-                if (Array.isArray(artworkList)) {
-                    setArtfeed(artworkList);
-                } else {
-                    console.error('API response is not an array:', artworkList);
-                }
-            } catch (error) {
-                console.error('Error fetching artfeed:', error);
-            }
-        };
-
-        fetchArtfeed();
-    }, []);
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error fetching artfeed: {error.message}</div>;
 
     return (
         <div className='flex justify-center'>
             <div className='w-2/3'>
-                <h1>Artfeed Feed</h1>
+                <h1>Artfeed</h1>
                 <ul>
                     {artfeed.map((art) => (
                         <ArtFeedItem key={art.artworkId} art={art} />
