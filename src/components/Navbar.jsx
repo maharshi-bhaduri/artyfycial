@@ -30,7 +30,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="border-b border-gray-300 py-4 w-full fixed h-16 flex items-center z-10">
+        <nav className="border-b border-gray-300 py-4 w-full fixed h-12 flex items-center z-10">
             <div className="px-4 flex justify-between items-center w-full">
                 <div className="text-gray-700 text-3xl font-serif px-2 cursor-pointer hover:text-black">
                     Artyfycial

@@ -1,4 +1,4 @@
-export async function onRequest(context) {
+export async function onRequestPost(context) {
     try {
         console.log('Function triggered: deleteartwork');
 
