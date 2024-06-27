@@ -1,4 +1,3 @@
-// src/components/ArtFeed.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ArtFeedItem from './ArtFeedItem';

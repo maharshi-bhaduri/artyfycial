@@ -5,7 +5,9 @@ import { AuthProvider } from "./utils/AuthContextProvider";
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import Create from "./pages/Create";
+import ArtworkDetails from "./pages/ArtworkDetails";
 import Navbar from "./components/Navbar";
+
 
 export default function App() {
   initializeLocalForage();
@@ -21,6 +23,7 @@ export default function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/discover" element={<Discover />}></Route>
               <Route path="/create" element={<Create />}></Route>
+              <Route path="/artwork/:artworkId" element={<ArtworkDetails />} />
             </Routes>
           </div>
         </div>
