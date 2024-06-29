@@ -47,7 +47,7 @@ const FileUpload = () => {
 
       const formData = new FormData();
       const data = {
-        artistId: localStorage.getItem('userId'),
+        artistId: 3,
         title,
         uploadDate: new Date().toISOString(),
         description,
@@ -62,12 +62,14 @@ const FileUpload = () => {
       const response = await axios.post(
         import.meta.env.VITE_APP_ADD_IMAGE,
         formData,
-        { "Content-Type": "multipart/form-data" },
         {
+          headers: { "Content-Type": "multipart/form-data" },
+
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
+            console.log(percentCompleted);
             setProgress(percentCompleted);
           },
         }
