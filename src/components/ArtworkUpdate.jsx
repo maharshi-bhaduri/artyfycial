@@ -18,9 +18,9 @@ const deleteArtwork = async (artworkId) => {
     const response = await axios.post(import.meta.env.VITE_APP_DELETE_ARTWORK,
         { artworkId },
         {
-            headers:
-                { "Content-Type": "application/json" }
+            "Content-Type": "application/json"
         }
+
     );
     return response.data;
 };
@@ -86,8 +86,10 @@ const ArtworkUpdate = () => {
     };
 
     const handleDelete = () => {
-        console.log("calling delete artwork mutaition")
-        deleteArtworkMutation();
+        console.log("called handle delete")
+        const resp = deleteArtwork(artworkId);
+        console.log(resp);
+        // deleteArtworkMutation();
     };
 
     const openModal = () => setIsModalOpen(true);
