@@ -8,7 +8,7 @@ export async function onRequest(context) {
         }
 
         // Extract artwork details from the request
-        const { artworkId, artistId, title, date, description, active, path } = await context.request.json();
+        const { artworkId, title, description, isActive, isPublic } = await context.request.json();
 
         // Check if artworkId is provided
         if (!artworkId) {
@@ -18,13 +18,13 @@ export async function onRequest(context) {
         // Prepare the SQL statement for updating an artwork
         const statement = `
             UPDATE artwork
-            SET artistId = ?, title = ?, date = ?, description = ?, active = ?, path = ?
+            SET title = ?, description = ?, isActive = ?, isPublic = ?
             WHERE artworkId = ?;
         `;
 
         // Execute the SQL statement
         const res = await context.env.DB.prepare(statement)
-            .bind(artistId, title, date, description, active, path, artworkId)
+            .bind(title, description, isActive, isPublic, artworkId)
             .run();
 
         // Check if the update was successful

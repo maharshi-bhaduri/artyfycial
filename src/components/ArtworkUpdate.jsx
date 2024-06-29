@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
@@ -10,7 +10,10 @@ const fetchArtworkDetails = async (artworkId) => {
 };
 
 const updateArtworkDetails = async (artworkId, updatedDetails) => {
-    const response = await axios.post(`${import.meta.env.VITE_APP_UPDATE_ARTWORK}/${artworkId}`, updatedDetails);
+    const response = await axios.post(import.meta.env.VITE_APP_UPDATE_ARTWORK, {
+        artworkId,
+        ...updatedDetails,
+    });
     return response.data;
 };
 
@@ -18,9 +21,10 @@ const deleteArtwork = async (artworkId) => {
     const response = await axios.post(import.meta.env.VITE_APP_DELETE_ARTWORK,
         { artworkId },
         {
-            "Content-Type": "application/json"
+            headers: {
+                "Content-Type": "application/json"
+            }
         }
-
     );
     return response.data;
 };
@@ -37,6 +41,18 @@ const ArtworkUpdate = () => {
     );
     const [formData, setFormData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (!isLoading && artworkDetails && !formData) {
+            setFormData({
+                url: artworkDetails.url || '',
+                title: artworkDetails.title || '',
+                description: artworkDetails.description || '',
+                isActive: artworkDetails.isActive || false,
+                isPublic: artworkDetails.isPublic || false,
+            });
+        }
+    }, [isLoading, artworkDetails, formData]);
 
     const { mutate: updateArtwork, isLoading: isUpdating } = useMutation(
         (updatedDetails) => updateArtworkDetails(artworkId, updatedDetails),
@@ -62,16 +78,6 @@ const ArtworkUpdate = () => {
         }
     );
 
-    if (!isLoading && artworkDetails && !formData) {
-        setFormData({
-            url: artworkDetails.url || '',
-            title: artworkDetails.title || '',
-            description: artworkDetails.description || '',
-            isActive: artworkDetails.isActive || false,
-            isPublic: artworkDetails.isPublic || false,
-        });
-    }
-
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
         setFormData((prevData) => ({
@@ -86,10 +92,7 @@ const ArtworkUpdate = () => {
     };
 
     const handleDelete = () => {
-        console.log("called handle delete")
-        const resp = deleteArtwork(artworkId);
-        console.log(resp);
-        // deleteArtworkMutation();
+        deleteArtworkMutation();
     };
 
     const openModal = () => setIsModalOpen(true);
