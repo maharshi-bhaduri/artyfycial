@@ -24,6 +24,7 @@ export const onRequestOptions = async () => {
 const allowCors = (fn) => async (context) => {
     try {
         const { request } = context;
+        console.log("hello from cors. incoming function: ", fn)
 
         // Handle CORS preflight requests
         if (request.method === 'OPTIONS') {
