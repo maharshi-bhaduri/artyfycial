@@ -4,6 +4,7 @@ import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal';  // Import the modal component
 
+
 const fetchArtworkDetails = async (artworkId) => {
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
     return response.data;
