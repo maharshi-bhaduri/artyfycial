@@ -24,7 +24,7 @@ const Navbar = () => {
   const handleNavigation = () => {
     if (location.pathname === "/discover") {
       navigate("/create");
-    } else if (location.pathname === "/create") {
+    } else {
       navigate("/discover");
     }
   };
