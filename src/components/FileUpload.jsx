@@ -48,7 +48,7 @@ const FileUpload = () => {
 
       const formData = new FormData();
       const data = {
-        artistId: 3,
+        artistId: localStorage.getItem('userId'),
         title,
         uploadDate: new Date().toISOString(),
         description,
