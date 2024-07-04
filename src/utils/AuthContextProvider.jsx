@@ -11,12 +11,15 @@ const getUserId = async function (user) {
   // Make the PUT API call
   const userData = {
     uid: user?.uid,
-    firstName: user?.displayName.split(' ')[0],
-    lastName: user?.displayName.split(' ').slice(1).join(' '),
+    firstName: user?.displayName.split(" ")[0],
+    lastName: user?.displayName.split(" ").slice(1).join(" "),
   };
-  const apiResponse = await axios.post(import.meta.env.VITE_APP_ADD_USER, userData);
-  return apiResponse
-}
+  const apiResponse = await axios.post(
+    import.meta.env.VITE_APP_ADD_USER,
+    userData
+  );
+  return apiResponse;
+};
 
 const AuthProvider = ({ children }) => {
   const location = useLocation();
@@ -28,21 +31,26 @@ const AuthProvider = ({ children }) => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        localStorage.setItem("displayName", user.displayName);
-        setUser(user);
         user.getIdToken().then((token) => {
           Cookies.set("token", token);
-          const userIdAPIresponse = getUserId(user).then((userIdAPIresponse) => {
-            console.log("userIdAPIresponse", userIdAPIresponse)
-            if (userIdAPIresponse.status === 200) {
-              localStorage.setItem("userId", userIdAPIresponse.data.userId);
-              if (allowedPaths.includes(location.pathname)) {
-                navigate("/discover");
+          if (localStorage.getItem("displayName") == null) {
+            const userIdAPIresponse = getUserId(user).then(
+              (userIdAPIresponse) => {
+                console.log("userIdAPIresponse", userIdAPIresponse);
+
+                if (userIdAPIresponse.status === 200) {
+                  localStorage.setItem("userId", userIdAPIresponse.data.userId);
+                  if (allowedPaths.includes(location.pathname)) {
+                    navigate("/discover");
+                  }
+                } else {
+                  signOutFn();
+                }
+                localStorage.setItem("displayName", user.displayName);
+                setUser(user);
               }
-            } else {
-              signOutFn();
-            }
-          })
+            );
+          }
         });
       } else {
         if (!allowedPaths.includes(location.pathname)) {
