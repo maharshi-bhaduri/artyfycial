@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 
-
 const FileUpload = () => {
   const inputRef = useRef();
 
@@ -10,6 +9,7 @@ const FileUpload = () => {
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
   const [uploadStatus, setUploadStatus] = useState("select");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleFileChange = (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -26,6 +26,7 @@ const FileUpload = () => {
 
   const onChooseFile = () => {
     inputRef.current.click();
+    setIsDisabled(false);
   };
 
   const clearFileInput = () => {
@@ -48,7 +49,7 @@ const FileUpload = () => {
 
       const formData = new FormData();
       const data = {
-        artistId: localStorage.getItem('userId'),
+        artistId: localStorage.getItem("userId"),
         title,
         uploadDate: new Date().toISOString(),
         description,
@@ -77,6 +78,7 @@ const FileUpload = () => {
       );
 
       setUploadStatus("done");
+      setIsDisabled(true);
       console.log(
         "Image uploaded successfully and response is",
         JSON.stringify(response.data)
@@ -150,12 +152,14 @@ const FileUpload = () => {
               placeholder="Title"
               value={title}
               onChange={handleTitleChange}
+              disabled={isDisabled}
               className="w-80 text-sm px-4 py-2 border border-gray-300 rounded-lg"
             />
             <textarea
               placeholder="Description"
               value={description}
               onChange={handleDescriptionChange}
+              disabled={isDisabled}
               className="w-80 h-24 text-sm px-4 py-2 border border-gray-300 rounded-lg resize-none"
             />
           </div>
