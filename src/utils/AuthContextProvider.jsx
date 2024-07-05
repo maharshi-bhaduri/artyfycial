@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
       if (user) {
         user.getIdToken().then((token) => {
           Cookies.set("token", token);
-          if (localStorage.getItem("displayName") == null) {
+          if (localStorage.getItem("userId") == null) {
             const userIdAPIresponse = getUserId(user).then(
               (userIdAPIresponse) => {
                 console.log("userIdAPIresponse", userIdAPIresponse);
@@ -50,6 +50,9 @@ const AuthProvider = ({ children }) => {
                 setUser(user);
               }
             );
+          }
+          if (localStorage.getItem("userId") !== null) {
+            if (allowedPaths.includes(location.pathname)) navigate("/discover");
           }
         });
       } else {
