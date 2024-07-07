@@ -6,7 +6,7 @@ import {
   signOutFn,
   onAuthStateChanged,
 } from "../utils/Firebase";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../utils/AuthContextProvider";
 const Navbar = () => {
   const navigate = useNavigate();
@@ -21,16 +21,22 @@ const Navbar = () => {
     return () => unsubscribe();
   }, [user]);
 
-  const handleNavigation = () => {
+  const handleNavigation = (event) => {
+    event.preventDefault();
     if (location.pathname === "/discover") {
       navigate("/create");
     } else {
       navigate("/discover");
     }
   };
-  const signOutFnWrapper = () => {
+  const signOutFnWrapper = (event) => {
+    event.preventDefault();
     signOutFn();
     navigate("/");
+  };
+  const signInFnWrapper = (event) => {
+    event.preventDefault();
+    signInWithGoogle();
   };
   return (
     <nav className="border-b border-gray-300 py-4 w-full fixed h-12 flex items-center z-10">
@@ -46,6 +52,9 @@ const Navbar = () => {
           >
             {location.pathname === "/discover" ? "Create" : "Discover"}
           </a>
+          {/* <Link onClick={handleNavigation}>
+            {location.pathname === "/discover" ? "Create" : "Discover"}
+          </Link> */}
           <a
             href="#"
             className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
@@ -64,7 +73,7 @@ const Navbar = () => {
             <a
               href="#"
               className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
-              onClick={signInWithGoogle}
+              onClick={signInFnWrapper}
             >
               Sign In
             </a>

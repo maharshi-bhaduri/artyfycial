@@ -5,9 +5,10 @@ import { AuthProvider } from "./utils/AuthContextProvider";
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import Create from "./pages/Create";
-import ArtworkDetails from "./components/ArtworkDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import ArtworkMain from "./pages/ArtworkMain";
+import PageNotFound from "./pages/PageNotFound";
 
 
 export default function App() {
@@ -19,13 +20,25 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <div className="h-screen flex ">
           <Navbar />
-          <div className="flex-grow overflow-auto mt-16 flex items-center">
+          <div className="flex-grow overflow-auto mt-12 flex items-center">
             <Routes>
-              <Route path="/" element={<Home />}></Route>
-              <Route path="/discover" element={<Discover />}></Route>
-              <Route path="/create" element={<Create />}></Route>
-              <Route path="/artwork/:artworkId/*" element={<ArtworkMain />} />
-              {/* <Route path="/edit/:artworkId" element={<ArtworkDetails />} /> */}
+              <Route path="/" element={
+                <ProtectedRoute onlyPublic={true}>
+                  <Home />
+                </ProtectedRoute>
+              }></Route>
+              <Route path="/discover" element={
+                <ProtectedRoute> <Discover /></ProtectedRoute>
+              }></Route>
+              <Route path="/create" element={
+                <ProtectedRoute> <Create /></ProtectedRoute>}
+              ></Route>
+              <Route path="/artwork/:artworkId/*" element={
+                <ProtectedRoute><ArtworkMain /></ProtectedRoute>
+              } />
+              <Route path="/error" element={
+                <ProtectedRoute><PageNotFound /></ProtectedRoute>
+              } />
             </Routes>
           </div>
         </div>
