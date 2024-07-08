@@ -31,16 +31,15 @@ const AuthProvider = ({ children }) => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        // location.pathname returns the pathname of the oldest url manually refreshed
         user.getIdToken().then((token) => {
           Cookies.set("token", token);
           if (localStorage.getItem("userId") == null) {
             const userIdAPIresponse = getUserId(user).then(
               (userIdAPIresponse) => {
-                console.log("userIdAPIresponse", userIdAPIresponse);
-
                 if (userIdAPIresponse.status === 200) {
                   localStorage.setItem("userId", userIdAPIresponse.data.userId);
-                  if (allowedPaths.includes(location.pathname)) {
+                  if (allowedPaths.includes(window.location.pathname)) {
                     navigate("/discover");
                   }
                 } else {
@@ -51,12 +50,9 @@ const AuthProvider = ({ children }) => {
               }
             );
           }
-          if (localStorage.getItem("userId") !== null) {
-            if (allowedPaths.includes(location.pathname)) navigate("/discover");
-          }
         });
       } else {
-        if (!allowedPaths.includes(location.pathname)) {
+        if (!allowedPaths.includes(window.location.pathname)) {
           navigate("/");
         }
       }
