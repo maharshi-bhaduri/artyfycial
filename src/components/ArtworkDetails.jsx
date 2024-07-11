@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import ArtworkDisplay from './ArtworkDisplay';
 import axios from 'axios';
 import PopupMenu from './PopupMenu';
+import Recommendation from './Recommendation';
 
 const ArtworkDetails = () => {
     const { artworkId } = useParams();
@@ -13,6 +14,17 @@ const ArtworkDetails = () => {
     const userId = useRef(localStorage.getItem('userId'));
 
     const artFromState = location.state?.art;
+
+    const fetchArtworkDetails = async (artworkId) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
+            setArtistId(response.data.artistId.toString());
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching artwork details:', error);
+            throw new Error('Failed to fetch artwork details');
+        }
+    };
 
     const { data: art, error, isLoading } = useQuery(
         ['artworkDetails', artworkId],
@@ -29,17 +41,6 @@ const ArtworkDetails = () => {
         }
     }, []);
 
-    const fetchArtworkDetails = async (artworkId) => {
-        try {
-            const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
-            setArtistId(response.data.artistId.toString());
-            return response.data;
-        } catch (error) {
-            console.error('Error fetching artwork details:', error);
-            throw new Error('Failed to fetch artwork details');
-        }
-    };
-
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching artwork details: {error.message}</div>;
 
@@ -48,10 +49,10 @@ const ArtworkDetails = () => {
     ];
 
     return (
-        <div className="w-full p-4 relative">
+        <div className="w-full p-4">
             <div className="flex justify-between items-center mb-4">
                 <button
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/discover')}
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                 >
                     Back
@@ -62,6 +63,8 @@ const ArtworkDetails = () => {
             </div>
 
             <ArtworkDisplay art={art} />
+
+            <Recommendation artistId={artistId} artworkId={art.artworkId} />
         </div>
     );
 };

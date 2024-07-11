@@ -10,6 +10,7 @@ export async function onRequest(context) {
     // Extract artistId from the request
     const url = new URL(context.request.url);
     const artistId = url.searchParams.get("artistId");
+    const current = url.searchParams.get("current");
 
     // Check if artistId is provided
     if (!artistId) {
@@ -19,11 +20,13 @@ export async function onRequest(context) {
     // Prepare the SQL statement to fetch artworks by artistId
     const statement = `
             SELECT * FROM artwork
-            WHERE artistId = ?;
-        `;
+            WHERE artistId = ?
+        ` + (current ? ` AND artworkId != ? ;` : `;`);
 
     // Execute the SQL statement
-    const res = await context.env.DB.prepare(statement).bind(artistId).all();
+    const res = current ? await context.env.DB.prepare(statement).bind(artistId, current).all()
+      : await context.env.DB.prepare(statement).bind(artistId).all();
+
 
     // Check if the query was successful and results are available
     if (!res || !res.results) {
