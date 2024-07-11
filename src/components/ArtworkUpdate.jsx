@@ -4,7 +4,6 @@ import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal';  // Import the modal component
 
-
 const fetchArtworkDetails = async (artworkId) => {
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
     return response.data;
@@ -47,7 +46,7 @@ const ArtworkUpdate = () => {
     useEffect(() => {
         if (!isLoading && artworkDetails && !formData) {
             if (userId != artworkDetails.artistId) {
-                navigate('/error')
+                navigate('/error');
             }
             setFormData({
                 url: artworkDetails.url || '',
@@ -89,6 +88,10 @@ const ArtworkUpdate = () => {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
+    };
+
+    const handleCancel = () => {
+        navigate(`/artwork/${artworkId}`)
     };
 
     const handleSubmit = (e) => {
@@ -165,6 +168,13 @@ const ArtworkUpdate = () => {
                                         disabled={isUpdating}
                                     >
                                         {isUpdating ? 'Updating...' : 'Update Artwork'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                                    >
+                                        Cancel
                                     </button>
                                     <button
                                         type="button"
