@@ -13,6 +13,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isSignedIn, setIsSignedIn] = useState(false);
   const user = useContext(AuthContext);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsSignedIn(!!user);
@@ -29,11 +30,18 @@ const Navbar = () => {
       navigate("/discover");
     }
   };
+
   const signOutFnWrapper = (event) => {
     event.preventDefault();
     signOutFn();
     navigate("/");
   };
+
+  const navigateAccountHandler = (event) => {
+    event.preventDefault();
+    navigate("/account");
+  };
+
   const signInFnWrapper = (event) => {
     event.preventDefault();
     signInWithGoogle();
@@ -41,7 +49,8 @@ const Navbar = () => {
   return (
     <nav className="border-b border-gray-300 py-4 w-full fixed h-12 flex items-center z-10">
       <div className="px-4 flex justify-between items-center w-full">
-        <div className="text-gray-700 text-3xl font-serif px-2 cursor-pointer hover:text-black">
+        <div className="text-gray-700 text-3xl font-serif px-2 cursor-pointer hover:text-black"
+          onClick={() => navigate("/discover")}>
           Artyfycial
         </div>
         <div className="flex">
@@ -58,8 +67,9 @@ const Navbar = () => {
           <a
             href="#"
             className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
+            onClick={navigateAccountHandler}
           >
-            Services
+            Account
           </a>
           {isSignedIn ? (
             <a

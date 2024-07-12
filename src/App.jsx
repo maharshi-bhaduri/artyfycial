@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import ArtworkMain from "./pages/ArtworkMain";
 import PageNotFound from "./pages/PageNotFound";
+import Account from "./pages/Account";
+import Artist from "./pages/Artist";
 
 
 export default function App() {
@@ -35,6 +37,12 @@ export default function App() {
               ></Route>
               <Route path="/artwork/:artworkId/*" element={
                 <ProtectedRoute><ArtworkMain /></ProtectedRoute>
+              } />
+              <Route path="/account" element={
+                <ProtectedRoute><Account /></ProtectedRoute>
+              } />
+              <Route path="/artist/:userName/*" element={
+                <ProtectedRoute><Artist /></ProtectedRoute>
               } />
               <Route path="/error" element={
                 <ProtectedRoute><PageNotFound /></ProtectedRoute>

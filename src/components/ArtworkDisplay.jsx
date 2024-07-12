@@ -8,8 +8,6 @@ const ArtworkDisplay = ({ art }) => {
                 alt={art.title}
                 className="object-contain max-w-full max-h-[400px]"
             />
-            <h1 className="text-2xl font-bold mt-4">{art.title}</h1>
-            <p className="mt-2">{art.description}</p>
         </div>
     );
 };

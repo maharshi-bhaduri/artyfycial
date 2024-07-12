@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import ArtworkDisplay from './ArtworkDisplay';
 import axios from 'axios';
@@ -58,11 +58,34 @@ const ArtworkDetails = () => {
                     Back
                 </button>
                 {userId.current === artistId && (
-                    <PopupMenu options={manageOptions} />
+                    <PopupMenu options={manageOptions}>
+                        <button
+                            className="bg-gray-500 text-white px-4 py-2 rounded"
+                        >
+                            Manage
+                        </button>
+                    </PopupMenu>
                 )}
             </div>
+            <div className='w-full flex m-4 justify-center'>
+                <ArtworkDisplay art={art} />
+                <div className='flex-col mx-4'>
+                    <h1 className='text-3xl font-bold'>{art.title}</h1>
+                    <p className='mt-2 text-lg'>{art.description}</p>
+                    <div className='mt-4'>
+                        by
+                        <br />
+                        <Link to={`/artist/${art.userName}`} state={{ art }}>
+                            <div
+                                className='text-blue-500 hover:underline'
+                            >
+                                {`${art.firstName} ${art.lastName} (@${art.userName})`}
+                            </div>
+                        </Link>
+                    </div>
+                </div>
 
-            <ArtworkDisplay art={art} />
+            </div>
 
             <Recommendation artistId={artistId} artworkId={art.artworkId} />
         </div>
