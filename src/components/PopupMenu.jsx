@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const PopupMenu = ({ options }) => {
+const PopupMenu = ({ options, children }) => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -20,12 +20,9 @@ const PopupMenu = ({ options }) => {
 
     return (
         <div className="relative" ref={menuRef}>
-            <button
-                onClick={() => setMenuOpen(!isMenuOpen)}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-            >
-                Manage
-            </button>
+            <div onClick={() => setMenuOpen(!isMenuOpen)}>
+                {children}
+            </div>
             {isMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-md border border-gray-300 rounded-md z-20">
                     {options.map((option, index) => (

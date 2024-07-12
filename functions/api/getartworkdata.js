@@ -18,7 +18,8 @@ export async function onRequest(context) {
 
     // Prepare the SQL statement to fetch artwork details by artworkId
     const statement = `
-            SELECT * FROM artwork
+            SELECT * FROM artwork a
+            join user u on a.artistId = u.userId
             WHERE artworkId = ?;
         `;
 

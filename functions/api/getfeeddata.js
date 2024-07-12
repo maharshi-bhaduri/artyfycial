@@ -15,7 +15,8 @@ export async function onRequest(context) {
 
         // Prepare the SQL statement to fetch artworks ordered by upload date with pagination
         const statement = `
-            SELECT * FROM artwork
+            SELECT * FROM artwork a
+            join user u on a.artistId = u.userId
             ORDER BY uploadDate DESC
             LIMIT ? OFFSET ?;
         `;
