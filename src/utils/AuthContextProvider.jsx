@@ -33,7 +33,8 @@ const AuthProvider = ({ children }) => {
       if (user) {
         // location.pathname returns the pathname of the oldest url manually refreshed
         user.getIdToken().then((token) => {
-          Cookies.set("token", token);
+          Cookies.set("token", token); // maybe remove this
+          localStorage.setItem("token", token);
           if (localStorage.getItem("userId") == null) {
             const userIdAPIresponse = getUserId(user).then(
               (userIdAPIresponse) => {

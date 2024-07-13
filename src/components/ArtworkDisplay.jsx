@@ -6,7 +6,7 @@ const ArtworkDisplay = ({ art }) => {
             <img
                 src={art.url}
                 alt={art.title}
-                className="object-contain max-w-full max-h-[400px]"
+                className="object-contain max-w-full min-w-[200px] max-h-[400px]"
             />
         </div>
     );

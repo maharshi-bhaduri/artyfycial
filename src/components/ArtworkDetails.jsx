@@ -67,26 +67,22 @@ const ArtworkDetails = () => {
                     </PopupMenu>
                 )}
             </div>
-            <div className='w-full flex m-4 justify-center'>
+            <div className='w-full flex flex-col md:flex-row mb-4 justify-center'>
                 <ArtworkDisplay art={art} />
-                <div className='flex-col mx-4'>
+                <div className='flex-col mx-4 mt-4 md:mt-0'>
                     <h1 className='text-3xl font-bold'>{art.title}</h1>
                     <p className='mt-2 text-lg'>{art.description}</p>
                     <div className='mt-4'>
                         by
                         <br />
                         <Link to={`/artist/${art.userName}`} state={{ art }}>
-                            <div
-                                className='text-blue-500 hover:underline'
-                            >
+                            <div className='text-blue-500 hover:underline'>
                                 {`${art.firstName} ${art.lastName} (@${art.userName})`}
                             </div>
                         </Link>
                     </div>
                 </div>
-
             </div>
-
             <Recommendation artistId={artistId} artworkId={art.artworkId} />
         </div>
     );
