@@ -24,7 +24,7 @@ const ArtFeed = () => {
     return (
         <div className='flex justify-center w-full'>
             <div className='w-full'>
-                <h1>Artfeed</h1>
+                <h1 className="text-2xl font-bold mb-4">Art Feed</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                     {artfeed.map((art) => (
                         <ArtFeedItem key={art.artworkId} art={art} />
