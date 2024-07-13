@@ -28,11 +28,10 @@ const Recommendation = ({ artistId, artworkId }) => {
                 {Array.isArray(moreArtworks) && moreArtworks.length != 0 ? moreArtworks.map((artwork) => (
                     <div
                         key={artwork.artworkId}
-                        className="border p-2 rounded cursor-pointer"
+                        className="border p-4 rounded-lg cursor-pointer"
                         onClick={() => navigate(`/artwork/${artwork.artworkId}`)}>
-                        <img src={artwork.url} alt={artwork.title} className="object-contain max-w-full max-h-48" />
+                        <img src={artwork.url} alt={artwork.title} className="object-contain max-w-full rounded-lg max-h-48" />
                         <h3 className="text-lg font-semibold">{artwork.title}</h3>
-                        <p className="text-sm">{artwork.description}</p>
                     </div>
                 ))
                     :

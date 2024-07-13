@@ -25,7 +25,7 @@ const Account = () => {
     };
 
     return (
-        <div className="p-4">
+        <div>
             <h1 className="text-2xl font-bold mb-4">Account Details</h1>
             <div>
                 <div className="mb-2"><strong>Username:</strong> {user.userName}</div>

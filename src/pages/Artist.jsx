@@ -57,7 +57,6 @@ const Artist = () => {
                             <div className="border p-4 rounded-lg">
                                 <img src={artwork.url} alt={artwork.title} className="w-full h-48 object-cover rounded-lg mb-2" />
                                 <h3 className="text-lg font-bold">{artwork.title}</h3>
-                                <p className="text-gray-600">{artwork.description}</p>
                                 <p className="text-sm text-gray-500">Uploaded on: {new Date(artwork.uploadDate).toLocaleDateString()}</p>
                             </div>
                         </Link>
