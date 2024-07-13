@@ -11,6 +11,7 @@ import ArtworkMain from "./pages/ArtworkMain";
 import PageNotFound from "./pages/PageNotFound";
 import Account from "./pages/Account";
 import Artist from "./pages/Artist";
+import AccountUpdate from "./pages/AccountUpdate";
 
 
 export default function App() {
@@ -40,6 +41,9 @@ export default function App() {
               } />
               <Route path="/account" element={
                 <ProtectedRoute><Account /></ProtectedRoute>
+              } />
+              <Route path="/account/edit" element={
+                <ProtectedRoute><AccountUpdate /></ProtectedRoute>
               } />
               <Route path="/artist/:userName/*" element={
                 <ProtectedRoute><Artist /></ProtectedRoute>
