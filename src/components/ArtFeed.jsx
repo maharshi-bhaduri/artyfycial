@@ -14,24 +14,22 @@ const fetchArtfeed = async () => {
 };
 
 const ArtFeed = () => {
-    const { data: artfeed, error, isLoading } = useQuery('artfeed', fetchArtfeed,
-        {
-            staleTime: 1000 * 60 * 5
-        }
-    );
+    const { data: artfeed, error, isLoading } = useQuery('artfeed', fetchArtfeed, {
+        staleTime: 1000 * 60 * 5,
+    });
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching artfeed: {error.message}</div>;
 
     return (
-        <div className='flex justify-center'>
-            <div className='w-2/3'>
+        <div className='flex justify-center w-full'>
+            <div className='w-full'>
                 <h1>Artfeed</h1>
-                <ul>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                     {artfeed.map((art) => (
                         <ArtFeedItem key={art.artworkId} art={art} />
                     ))}
-                </ul>
+                </div>
             </div>
         </div>
     );

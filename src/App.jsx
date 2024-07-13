@@ -22,7 +22,7 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <div className="h-screen flex ">
           <Navbar />
-          <div className="flex-grow overflow-auto mt-12">
+          <div className="flex-grow overflow-auto mt-12 md:px-20">
             <Routes>
               <Route path="/" element={
                 <ProtectedRoute onlyPublic={true}>

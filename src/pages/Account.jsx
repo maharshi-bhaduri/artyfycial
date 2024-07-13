@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const fetchUserData = async () => {
     const token = localStorage.getItem('token');
-    console.log("token ", token)
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_USER_DATA}`, {
         headers: {
             token: localStorage.getItem('token')

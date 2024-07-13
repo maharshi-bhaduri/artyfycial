@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const fetchArtistPortfolio = async (userName) => {
@@ -9,22 +9,17 @@ const fetchArtistPortfolio = async (userName) => {
 };
 
 const Artist = ({ artistId }) => {
-    const path = useLocation();
     const { userName } = useParams();
-    const artistFromState = path.state?.artist;
     const { data, error, isLoading } = useQuery(
         ['artistDetails', artistId],
-        () => fetchArtistPortfolio(userName),
-        {
-            enabled: !artistFromState,
-            initialData: artistFromState,
-        }
+        () => fetchArtistPortfolio(userName)
     );
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching artist details: {error.message}</div>;
 
     const { firstName, lastName, about, socials, phoneNumber, location, joinDate, profilePicturePath } = data.artist;
+    const artworks = data.artworks;
 
     return (
         <div className="p-4">
@@ -42,6 +37,21 @@ const Artist = ({ artistId }) => {
                     {phoneNumber && <p>Phone: {phoneNumber}</p>}
                 </div>
                 <p className="text-sm text-gray-500">Joined on: {new Date(joinDate).toLocaleDateString()}</p>
+            </div>
+            <div className="mt-6">
+                <h2 className="text-xl font-bold">Artworks</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
+                    {artworks.map(artwork => (
+                        <Link to={`/artwork/${artwork.artworkId}`}>
+                            <div key={artwork.artworkId} className="border p-4 rounded-lg">
+                                <img src={artwork.url} alt={artwork.title} className="w-full h-48 object-cover rounded-lg mb-2" />
+                                <h3 className="text-lg font-bold">{artwork.title}</h3>
+                                <p className="text-gray-600">{artwork.description}</p>
+                                <p className="text-sm text-gray-500">Uploaded on: {new Date(artwork.uploadDate).toLocaleDateString()}</p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );
