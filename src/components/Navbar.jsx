@@ -60,7 +60,7 @@ const Navbar = () => {
   };
 
   const getLinkClass = (path) => {
-    return location.pathname === path ? "bg-black text-white animate-background-slide w-full" : "";
+    return location.pathname.includes(path) ? "bg-black text-white animate-background-slide w-full" : "";
   };
 
   return (
@@ -84,7 +84,7 @@ const Navbar = () => {
             <a
               key={item.name}
               href="#"
-              className={`text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300 ${getLinkClass(item.path)}`}
+              className={`w-full text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300 ${getLinkClass(item.path)}`}
               onClick={(event) => handleNavigation(event, item.path)}
             >
               {item.name}
