@@ -16,7 +16,7 @@ const ArtFeedItem = ({ art }) => {
                 <img
                     src={art.url}
                     alt={art.title}
-                    className={`w-full h-96 object-cover rounded-lg mb-2 ${isLoading ? 'hidden' : 'block'}`}
+                    className={`w-full h-60 object-cover rounded-lg mb-2 ${isLoading ? 'hidden' : 'block'}`}
                     onLoad={handleImageLoad}
                 />
                 {!isLoading && (

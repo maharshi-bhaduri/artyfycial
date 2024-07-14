@@ -4,7 +4,7 @@ import { initializeLocalForage } from "./utils/localforageUtils";
 import { AuthProvider } from "./utils/AuthContextProvider";
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
-import Create from "./pages/Create";
+import Studio from "./pages/Studio";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import ArtworkMain from "./pages/ArtworkMain";
@@ -32,8 +32,8 @@ export default function App() {
               <Route path="/discover" element={
                 <ProtectedRoute> <Discover /></ProtectedRoute>
               }></Route>
-              <Route path="/create" element={
-                <ProtectedRoute> <Create /></ProtectedRoute>}
+              <Route path="/studio" element={
+                <ProtectedRoute> <Studio /></ProtectedRoute>}
               ></Route>
               <Route path="/artwork/:artworkId/*" element={
                 <ProtectedRoute><ArtworkMain /></ProtectedRoute>
