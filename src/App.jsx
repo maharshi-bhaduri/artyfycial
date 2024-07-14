@@ -13,7 +13,6 @@ import Account from "./pages/Account";
 import Artist from "./pages/Artist";
 import AccountUpdate from "./pages/AccountUpdate";
 
-
 export default function App() {
   initializeLocalForage();
   const queryClient = new QueryClient();
@@ -21,9 +20,9 @@ export default function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <div className="h-screen flex ">
+        <div className="h-screen flex relative">
           <Navbar />
-          <div className="flex-grow overflow-auto mt-12 py-4 px-2 md:px-20">
+          <div className="flex-grow overflow-auto md:ml-40 py-4 px-2 md:px-20">
             <Routes>
               <Route path="/" element={
                 <ProtectedRoute onlyPublic={true}>

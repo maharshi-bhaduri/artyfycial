@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   auth,
-  provider,
   signInWithGoogle,
   signOutFn,
   onAuthStateChanged,
 } from "../utils/Firebase";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../utils/AuthContextProvider";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const user = useContext(AuthContext);
 
   useEffect(() => {
@@ -29,44 +30,69 @@ const Navbar = () => {
     } else {
       navigate("/discover");
     }
+    setIsOpen(false); // Close navbar on navigation
   };
 
   const signOutFnWrapper = (event) => {
     event.preventDefault();
     signOutFn();
     navigate("/");
+    setIsOpen(false); // Close navbar on sign out
   };
 
   const navigateAccountHandler = (event) => {
     event.preventDefault();
     navigate("/account");
+    setIsOpen(false); // Close navbar on navigation
   };
 
   const signInFnWrapper = (event) => {
     event.preventDefault();
     signInWithGoogle();
+    setIsOpen(false); // Close navbar on sign in
   };
+
+  const toggleNavbar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeNavbar = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <nav className="border-b border-gray-300 py-4 w-full fixed h-12 flex items-center z-10">
-      <div className="px-4 flex justify-between items-center w-full">
-        <div className="text-gray-700 text-3xl font-serif px-2 cursor-pointer hover:text-black"
-          onClick={() => navigate("/discover")}>
-          Artyfycial
-        </div>
-        <div className="flex">
+    <>
+      <button
+        className="md:hidden fixed top-4 right-4 z-20 p-2 bg-gray-700 text-white rounded"
+        onClick={toggleNavbar}
+      >
+        Menu
+      </button>
+      {isOpen && <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={closeNavbar}></div>}
+      <nav className={`border-r border-gray-300 py-4 fixed h-full flex flex-col items-start z-20 bg-white transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+        <div className="px-4 flex flex-col justify-start items-start w-full">
+          <div className="flex justify-between w-full">
+            <div className="text-gray-700 text-3xl font-serif px-2 py-4 cursor-pointer hover:text-black"
+              onClick={() => navigate("/discover")}>
+              Artyfycial
+            </div>
+            <button
+              className="md:hidden p-2 text-gray-700 hover:text-gray-900"
+              onClick={closeNavbar}
+            >
+              Close
+            </button>
+          </div>
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
+            className="text-gray-700 hover:text-gray-400 px-2 py-2 transition-all duration-300"
             onClick={handleNavigation}
           >
             {location.pathname === "/discover" ? "Create" : "Discover"}
           </a>
-          {/* <Link onClick={handleNavigation}>
-            {location.pathname === "/discover" ? "Create" : "Discover"}
-          </Link> */}
           <a
             href="#"
-            className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
+            className="text-gray-700 hover:text-gray-400 px-2 py-2 transition-all duration-300"
             onClick={navigateAccountHandler}
           >
             Account
@@ -74,7 +100,7 @@ const Navbar = () => {
           {isSignedIn ? (
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
+              className="text-gray-700 hover:text-gray-400 px-2 py-2 transition-all duration-300"
               onClick={signOutFnWrapper}
             >
               Sign Out
@@ -82,15 +108,15 @@ const Navbar = () => {
           ) : (
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-400 px-2 transition-all duration-300"
+              className="text-gray-700 hover:text-gray-400 px-2 py-2 transition-all duration-300"
               onClick={signInFnWrapper}
             >
               Sign In
             </a>
           )}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
 

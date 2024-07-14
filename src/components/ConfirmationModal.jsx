@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactModal from 'react-modal';
+import Loader from './Loader';
 
 const customStyles = {
     content: {
@@ -18,6 +19,13 @@ const customStyles = {
 };
 
 const ConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleConfirm = () => {
+        setIsLoading(true);
+        onConfirm();
+    };
+
     return (
         <ReactModal
             isOpen={isOpen}
@@ -26,12 +34,21 @@ const ConfirmationModal = ({ isOpen, onRequestClose, onConfirm }) => {
             ariaHideApp={false}
         >
             <div className="modal-content">
-                <h2>Confirm Deletion</h2>
-                <p>Are you sure you want to delete this artwork?</p>
-                <div className="modal-actions">
-                    <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
-                    <button onClick={onRequestClose} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">No</button>
-                </div>
+                {isLoading ? (
+                    <>
+                        <Loader />
+                        Deleting artwork
+                    </>
+                ) : (
+                    <>
+                        <h2>Confirm Deletion</h2>
+                        <p>Are you sure you want to delete this artwork?</p>
+                        <div className="modal-actions">
+                            <button onClick={handleConfirm} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Yes</button>
+                            <button onClick={onRequestClose} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">No</button>
+                        </div>
+                    </>
+                )}
             </div>
         </ReactModal>
     );
