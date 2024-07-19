@@ -12,6 +12,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Account from "./pages/Account";
 import Artist from "./pages/Artist";
 import AccountUpdate from "./pages/AccountUpdate";
+import AuctionMain from "./pages/AuctionMain";
 
 export default function App() {
   initializeLocalForage();
@@ -46,6 +47,9 @@ export default function App() {
               } />
               <Route path="/artist/:userName/*" element={
                 <ProtectedRoute><Artist /></ProtectedRoute>
+              } />
+              <Route path="/auctions/*" element={
+                <ProtectedRoute><AuctionMain /></ProtectedRoute>
               } />
               <Route path="/error" element={
                 <ProtectedRoute><PageNotFound /></ProtectedRoute>
