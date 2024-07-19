@@ -1,6 +1,4 @@
-// import { allowCors, buildResponse } from "../utils/utils";
-import { verifyIdToken } from "../utils/verifytoken"
-
+// import necessary modules
 export const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
@@ -26,6 +24,7 @@ export const onRequestOptions = async () => {
 const allowCors = (fn) => async (context) => {
     try {
         const { request } = context;
+        console.log("hello from cors. incoming function: ", fn)
 
         // Handle CORS preflight requests
         if (request.method === 'OPTIONS') {
@@ -45,30 +44,37 @@ const allowCors = (fn) => async (context) => {
     }
 }
 
-
 export async function onRequest(context) {
     try {
-        console.log('Function triggered: getUserData');
+        console.log('Function triggered: getAuctionListData');
 
-        const { isValid, decoded, error } = await verifyIdToken(context);
-
-        if (!isValid || error) {
-            return buildResponse(403, { message: "Unable to authenticate user." })
-        }
-
-        // Check if the DB binding exists
         if (!context.env.DB) {
             throw new Error("DB binding not found");
         }
 
-        // Check if the user already exists
-        const userResults = await context.env.DB.prepare("SELECT * FROM user WHERE uid = ?").bind(decoded).all();
-        const userDetails = userResults.results[0]
+        // Verify the ID token if necessary
+        // const { isValid, decoded, error } = await verifyIdToken(context);
+        // if (!isValid) {
+        //     return buildResponse(401, { message: "Unauthorized" });
+        // }
 
-        return buildResponse(200, userDetails)
+        // Fetch auction list from the database
+        const result = await context.env.DB.prepare(`
+            SELECT auctionId, auctionName, auctionDescription, startTime, endTime, auctioneerId, anonAuction
+            FROM auction
+            WHERE isActive = 1
+        `).all();
+
+        if (!result.success) {
+            throw new Error("Failed to fetch auction list");
+        }
+
+        const auctionList = result.results;
+
+        return buildResponse(200, auctionList);
     } catch (error) {
         console.error(error);
-        return buildResponse(500, { message: 'Internal Server Error' })
+        return buildResponse(500, { message: 'Internal Server Error' });
     }
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const PopupMenu = ({ options, children }) => {
+const PopupMenu = ({ options, children, onOptionClick }) => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -18,6 +18,11 @@ const PopupMenu = ({ options, children }) => {
         };
     }, []);
 
+    const handleOptionClick = (option) => {
+        setMenuOpen(false);
+        onOptionClick(option);
+    };
+
     return (
         <div className="relative" ref={menuRef}>
             <div onClick={() => setMenuOpen(!isMenuOpen)}>
@@ -26,13 +31,23 @@ const PopupMenu = ({ options, children }) => {
             {isMenuOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-md border border-gray-300 rounded-md z-20">
                     {options.map((option, index) => (
-                        <Link
-                            key={index}
-                            to={option.path}
-                            className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                        >
-                            {option.option}
-                        </Link>
+                        option.path ? (
+                            <Link
+                                key={index}
+                                to={option.path}
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                            >
+                                {option.option}
+                            </Link>
+                        ) : (
+                            <button
+                                key={index}
+                                onClick={() => handleOptionClick(option)}
+                                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                            >
+                                {option.option}
+                            </button>
+                        )
                     ))}
                 </div>
             )}

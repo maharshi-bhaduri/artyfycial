@@ -45,8 +45,21 @@ const ArtworkDetails = () => {
     if (error) return <div>Error fetching artwork details: {error.message}</div>;
 
     const manageOptions = [
-        { option: 'Edit', path: 'edit' }
+        { option: 'Edit', handleClick: 'edit' },
+        { option: 'Add to Collection', handleClick: 'add' }
     ];
+    const addOptions = [
+        { option: 'Collection', handleClick: 'add' }
+    ];
+
+    const handleOptionClick = (option) => {
+        if (option.handleClick === 'edit') {
+            navigate(`edit`);
+        } else if (option.handleClick === 'add') {
+            // Handle 'add' functionality here
+            console.log('Add option clicked');
+        }
+    };
 
     return (
         <div className="w-full p-4">
@@ -57,12 +70,26 @@ const ArtworkDetails = () => {
                 >
                     Back
                 </button>
-                {userId.current === artistId && (
-                    <PopupMenu options={manageOptions}>
+                {userId.current === artistId ? (
+                    <PopupMenu
+                        options={manageOptions}
+                        onOptionClick={handleOptionClick}
+                    >
                         <button
                             className="bg-gray-500 text-white px-4 py-2 rounded"
                         >
                             Manage
+                        </button>
+                    </PopupMenu>
+                ) : (
+                    <PopupMenu
+                        options={addOptions}
+                        onOptionClick={handleOptionClick}
+                    >
+                        <button
+                            className="bg-gray-500 text-white px-4 py-2 rounded"
+                        >
+                            Add
                         </button>
                     </PopupMenu>
                 )}

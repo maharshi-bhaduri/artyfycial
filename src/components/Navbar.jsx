@@ -8,21 +8,21 @@ import {
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../utils/AuthContextProvider";
 
-
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(location.pathname);
   const user = useContext(AuthContext);
 
   // navigation config
   const navConfig = [
     { name: "Discover", path: "/discover" },
     { name: "Studio", path: "/studio" },
+    { name: "Auctions", path: "/auctions" },
     { name: "Account", path: "/account" },
   ];
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -34,6 +34,7 @@ const Navbar = () => {
 
   const handleNavigation = (event, path) => {
     event.preventDefault();
+    setSelectedOption(path);
     navigate(path);
     setIsOpen(false); // Close navbar on navigation
   };
@@ -60,7 +61,7 @@ const Navbar = () => {
   };
 
   const getLinkClass = (path) => {
-    return location.pathname.includes(path) ? "bg-black text-white animate-background-slide w-full" : "";
+    return selectedOption === path ? "bg-black text-white animate-background-slide w-full" : "";
   };
 
   return (
@@ -76,7 +77,7 @@ const Navbar = () => {
         <div className="flex flex-col justify-start items-start w-full">
           <div className="flex justify-between w-full">
             <div className="text-gray-700 text-3xl font-serif px-4 mb-4 cursor-pointer hover:text-black"
-              onClick={() => navigate("/discover")}>
+              onClick={() => handleNavigation({}, "/discover")}>
               Artyfycial
             </div>
           </div>
@@ -93,7 +94,7 @@ const Navbar = () => {
           {isSignedIn ? (
             <a
               href="#"
-              className={`text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300`}
+              className={`w-full text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300`}
               onClick={signOutFnWrapper}
             >
               Sign Out
@@ -101,7 +102,7 @@ const Navbar = () => {
           ) : (
             <a
               href="#"
-              className={`text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300`}
+              className={`w-full text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300`}
               onClick={signInFnWrapper}
             >
               Sign In
