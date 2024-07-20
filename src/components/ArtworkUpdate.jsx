@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
-import ConfirmationModal from './ConfirmationModal';  // Import the modal component
+import GenericModal from './GenericModal';
+import ConfirmDelete from './ConfirmDelete';
+import Loader from './Loader';
+import ConfirmationModal from './ConfirmationModal';
 
 const fetchArtworkDetails = async (artworkId) => {
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
@@ -41,6 +44,7 @@ const ArtworkUpdate = () => {
     );
     const [formData, setFormData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const userId = localStorage.getItem("userId");
 
     useEffect(() => {
@@ -70,7 +74,7 @@ const ArtworkUpdate = () => {
         }
     );
 
-    const { mutate: deleteArtworkMutation, isLoading: isDeleting } = useMutation(
+    const { mutate: deleteArtworkMutation } = useMutation(
         () => deleteArtwork(artworkId),
         {
             onSuccess: () => {
@@ -99,12 +103,13 @@ const ArtworkUpdate = () => {
         updateArtwork(formData);
     };
 
-    const handleDelete = () => {
-        deleteArtworkMutation();
-    };
-
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const handleConfirmDelete = () => {
+        setIsDeleting(true);
+        deleteArtworkMutation();
+    };
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error fetching artwork details: {error.message}</div>;
@@ -187,11 +192,17 @@ const ArtworkUpdate = () => {
                             </div>
                         </div>
                     </form>
-                    <ConfirmationModal
+                    <GenericModal
                         isOpen={isModalOpen}
                         onRequestClose={closeModal}
-                        onConfirm={handleDelete}
-                    />
+                        title="Confirm Deletion"
+                    >
+                        <ConfirmDelete
+                            onConfirm={handleConfirmDelete}
+                            onCancel={closeModal}
+                            isLoading={isDeleting}
+                        />
+                    </GenericModal>
                 </div>
             }
         </>
