@@ -7,30 +7,52 @@ export async function onRequest(context) {
       throw new Error("DB binding not found");
     }
 
-    // Extract artistId from the request
+    // Extract parameters from the request
     const url = new URL(context.request.url);
     const artistId = url.searchParams.get("artistId");
     const current = url.searchParams.get("current");
+    const searchQuery = url.searchParams.get("searchQuery") ? decodeURIComponent(url.searchParams.get("searchQuery")) : '';
+    const searchOthers = url.searchParams.get("searchOthers") === 'true';
+    const limit = url.searchParams.get("limit") || 20;
 
-    // Check if artistId is provided
-    if (!artistId) {
-      throw new Error("artistId is required");
+    // Prepare the SQL statement to fetch artworks
+    let statement = `SELECT * FROM artwork WHERE 1=1`;
+    let bindings = [];
+
+    if (!searchOthers) {
+      if (!artistId) {
+        throw new Error("artistId is required if searchOthers is false");
+      }
+      statement += ` AND artistId = ?`;
+      bindings.push(artistId);
+    } else {
+      if (artistId) {
+        statement += ` AND artistId != ?`;
+        bindings.push(artistId);
+      }
     }
 
-    // Prepare the SQL statement to fetch artworks by artistId
-    const statement = `
-            SELECT * FROM artwork
-            WHERE artistId = ?
-        ` + (current ? ` AND artworkId != ? ;` : `;`);
+    if (current) {
+      statement += ` AND artworkId != ?`;
+      bindings.push(current);
+    }
+
+    if (searchQuery) {
+      statement += ` AND title LIKE ?`;
+      bindings.push(`%${searchQuery}%`);
+    }
+
+    statement += ` LIMIT ?`;
+    bindings.push(limit);
+
+    statement += `;`;
 
     // Execute the SQL statement
-    const res = current ? await context.env.DB.prepare(statement).bind(artistId, current).all()
-      : await context.env.DB.prepare(statement).bind(artistId).all();
-
+    const res = await context.env.DB.prepare(statement).bind(...bindings).all();
 
     // Check if the query was successful and results are available
     if (!res || !res.results) {
-      throw new Error("No artworks found for the given artistId");
+      throw new Error("No artworks found for the given query");
     }
 
     const artworks = res.results;
