@@ -33,6 +33,10 @@ CREATE TABLE artwork (
     isActive BOOLEAN NOT NULL,
     path VARCHAR(255),
     isPublic BOOLEAN NOT NULL,
+    forSale BOOLEAN NOT NULL DEFAULT 0,
+    valuation DECIMAL(15, 2) NOT NULL,
+    startingBid DECIMAL(15, 2),
+    bidIncrement DECIMAL(15, 2),
     clickCount INTEGER,
     FOREIGN KEY (artistId) REFERENCES user(userId) ON DELETE CASCADE
 );

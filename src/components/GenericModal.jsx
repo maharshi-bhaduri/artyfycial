@@ -20,7 +20,7 @@ const customStyles = {
     },
 };
 
-const GenericModal = ({ isOpen, onRequestClose, title, children }) => {
+const GenericModal = ({ isOpen, onRequestClose, title, children, minHeight, width }) => {
     return (
         <ReactModal
             isOpen={isOpen}
@@ -38,8 +38,10 @@ const GenericModal = ({ isOpen, onRequestClose, title, children }) => {
                         Close
                     </button>
                 </div>
-                <div className="overflow-y-auto max-h-[calc(80vh-70px)] p-4">
-                    {children}
+                <div style={{ minHeight, width }}>
+                    <div className="overflow-y-auto max-h-[calc(80vh-70px)] p-4">
+                        {children}
+                    </div>
                 </div>
             </div>
         </ReactModal>
