@@ -58,21 +58,30 @@ export async function onRequest(context) {
         }
 
         // Fetch auction details from the database
-        const result = await context.env.DB.prepare(`
+        const auctionResult = await context.env.DB.prepare(`
             SELECT auctionId, auctionName, auctionDescription, startTime, endTime, auctioneerId, anonAuction
             FROM auction
             WHERE auctionId = ? AND isActive = 1
         `).bind(auctionId).first();
 
-        if (!result) {
+        const auctionLots = await context.env.DB.prepare(`
+            SELECT *
+            FROM lot l
+            join artwork a on a.artworkId = l.artworkId
+            WHERE auctionId = ?;
+        `).bind(auctionId).all();
+
+        if (!auctionResult) {
             throw new Error("Failed to fetch auction details");
         }
 
-        if (!result) {
+        auctionResult['artworks'] = auctionLots.results;
+
+        if (!auctionResult) {
             return buildResponse(404, { message: "Auction not found" });
         }
 
-        return buildResponse(200, result);
+        return buildResponse(200, auctionResult);
     } catch (error) {
         console.error(error);
         return buildResponse(500, { message: 'Internal Server Error' });

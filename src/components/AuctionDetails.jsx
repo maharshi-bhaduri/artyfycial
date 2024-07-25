@@ -24,6 +24,7 @@ const AuctionDetails = () => {
     const navigate = useNavigate();
     const auctionFromState = location.state?.auction;
     const queryClient = useQueryClient();
+    const [selectedArtworks, setSelectedArtworks] = useState([])
 
     const { data: auction, error, isLoading } = useQuery(
         ['auctionDetails', auctionId],
@@ -31,6 +32,10 @@ const AuctionDetails = () => {
         {
             enabled: !auctionFromState,
             initialData: auctionFromState,
+            onSuccess: (res) => {
+                const artworks = res.artworks
+                setSelectedArtworks(artworks.map(artwork => artwork.artworkId));
+            },
         }
     );
 
@@ -110,7 +115,11 @@ const AuctionDetails = () => {
                 minHeight={'80vh'}
                 width={'400px'}
             >
-                <ArtworkSelectionModalContent onArtworkSelect={handleArtworkSelect} />
+                <ArtworkSelectionModalContent
+                    onArtworkSelect={handleArtworkSelect}
+                    initialSelected={selectedArtworks}
+                    onClose={handleModalClose}
+                />
             </GenericModal>
         </div>
     );
