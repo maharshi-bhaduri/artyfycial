@@ -20,12 +20,12 @@ const saveChangesToBackend = async (auctionId, addedArtworks, removedArtworks) =
     return response.data;
 };
 
-const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
+const ArtworkSelectionModalContent = ({ onArtworkSelect, initialSelected, onClose }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [selectedArtworks, setSelectedArtworks] = useState([]);
     const [removedArtworks, setRemovedArtworks] = useState([]);
-    const [changesMade, setChangesMade] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const queryClient = useQueryClient();
     const { auctionId } = useParams();
 
@@ -36,6 +36,10 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
             enabled: true,
         }
     );
+
+    console.log('selectedArtworks ', selectedArtworks)
+    console.log('removedArtworks ', removedArtworks)
+    console.log('initialSelected ', initialSelected)
 
     useEffect(() => {
         queryClient.invalidateQueries(['artworks', '']);
@@ -51,46 +55,12 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
         }
     };
 
-    const handleArtworkToggle = (artwork) => {
-        console.log("artwork: ", artwork.artworkId)
-        const isSelected = selectedArtworks.includes(artwork.artworkId);
-        const isRemoved = removedArtworks.includes(artwork.artworkId);
-        console.log("isSelected: ", isSelected)
-        console.log("isRemoved: ", isRemoved)
-
-        if (isSelected && !isRemoved) {
-            setSelectedArtworks(selectedArtworks.filter(id => id !== artwork.artworkId));
-            setRemovedArtworks([...removedArtworks, artwork.artworkId]);
-        } else if (!isSelected && isRemoved) {
-            setRemovedArtworks(removedArtworks.filter(id => id !== artwork.artworkId));
-        } else {
-            setSelectedArtworks([...selectedArtworks, artwork.artworkId]);
-        }
-        setChangesMade(true);
-        console.log("selected list: ", selectedArtworks)
-        console.log("removed list: ", removedArtworks)
-    };
-    console.log("selected list: ", selectedArtworks)
-    console.log("removed list: ", removedArtworks)
-
-    const mutation = useMutation(saveChangesToBackend, {
-        onSuccess: () => {
-            setChangesMade(false);
-            setSelectedArtworks([]);
-            setRemovedArtworks([]);
-        },
-        onError: (error) => {
-            console.error('Error saving changes:', error);
-        },
-    });
-
     const handleArtworkAdd = (artworkId) => {
         if (removedArtworks.includes(artworkId)) {
             setRemovedArtworks(removedArtworks.filter(id => id !== artworkId));
         } else {
             setSelectedArtworks([...selectedArtworks, artworkId]);
         }
-        // setChangesMade(true);
     };
 
     const handleArtworkRemove = (artworkId) => {
@@ -99,27 +69,29 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
         } else {
             setRemovedArtworks([...removedArtworks, artworkId]);
         }
-        // setChangesMade(true);
     };
 
     const { mutate: updateAuctionArtworkMutation } = useMutation(
         () => saveChangesToBackend(auctionId, selectedArtworks, removedArtworks),
         {
             onSuccess: () => {
-                console.log('artwork added')
+                console.log('Artworks updated successfully');
+                setIsSaving(false);
+                setRemovedArtworks([]);
+                setSelectedArtworks([]);
+                queryClient.invalidateQueries(['auctionDetails', auctionId]);
+                onClose();
             },
             onError: (error) => {
-                console.error('Error deleting artwork:', error);
+                console.error('Error updating artworks:', error);
+                setIsSaving(false);
             },
         }
     );
 
     const handleSaveChanges = () => {
-        const changes = {
-            added: selectedArtworks,
-            removed: removedArtworks,
-        };
-        updateAuctionArtworkMutation(changes);
+        setIsSaving(true);
+        updateAuctionArtworkMutation();
     };
 
     if (isLoading) return <div className='flex justify-center items-center h-full'><Loader /></div>;
@@ -139,28 +111,28 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
                     placeholder="Search artworks"
                 />
             </div>
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${changesMade ? 'mb-16' : ''}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 ${(selectedArtworks.length > 0 || removedArtworks.length > 0) ? 'mb-16' : ''}`}>
                 {filteredArtworks.map((artwork) => (
-                    <div key={artwork.artworkId} className={`border p-2 rounded-md ${selectedArtworks.includes(artwork.artworkId) ? 'border-blue-500' : removedArtworks.includes(artwork.artworkId) ? 'border-red-500' : ''}`}>
+                    <div key={artwork.artworkId} className={`border p-2 rounded-md ${(selectedArtworks.includes(artwork.artworkId) || (initialSelected.includes(artwork.artworkId) && !removedArtworks.includes(artwork.artworkId))) ? 'border-blue-500' : removedArtworks.includes(artwork.artworkId) ? 'border-red-500' : ''}`}>
                         <div className="aspect-w-1 aspect-h-1">
                             <img src={artwork.url}
                                 alt={artwork.title}
-                                className="object-cover w-full h-full"
+                                className="object-cover w-full h-full rounded"
                             />
                         </div>
                         <div className="flex justify-between items-center mt-2">
                             <strong>{artwork.title}</strong>
-                            {selectedArtworks.includes(artwork.artworkId) ?
+                            {(selectedArtworks.includes(artwork.artworkId) ||
+                                (initialSelected.includes(artwork.artworkId) && !removedArtworks.includes(artwork.artworkId))) ?
                                 <button
                                     onClick={() => handleArtworkRemove(artwork.artworkId)}
-                                    className="bg-blue-500 text-white px-4 py-2 ml-2 rounded">
+                                    className="bg-red-500 text-white px-4 py-2 ml-2 rounded">
                                     Remove
                                 </button>
                                 :
                                 <button
                                     onClick={() => handleArtworkAdd(artwork.artworkId)}
                                     className="bg-blue-500 text-white px-4 py-2 ml-2 rounded">
-                                    {/* {selectedArtworks.includes(artwork.artworkId) && !removedArtworks.includes(artwork.artworkId) ? 'Remove' : 'Add'} */}
                                     Add
                                 </button>
                             }
@@ -169,15 +141,17 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect }) => {
                 ))}
             </div>
             {(selectedArtworks.length > 0 || removedArtworks.length > 0) && (
-                <div className="fixed bottom-0 left-0 w-full bg-white p-4 shadow-lg">
+                <div className="fixed bottom-0 left-0 w-full p-4 rounded-md shadow-2xl flex justify-center">
                     <button
                         onClick={handleSaveChanges}
-                        className="bg-green-500 text-white px-4 py-2 rounded">
-                        Save Changes
+                        className={`bg-blue-500 text-white px-4 py-2 rounded ${isSaving && 'bg-gray-500'}`}
+                        disabled={isSaving}>
+                        {isSaving ? 'Saving changes...' : 'Save Changes'}
                     </button>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 

@@ -62,19 +62,19 @@ export async function onRequestPost(context) {
             batchStatements.push(context.env.DB.prepare(removeStatement).bind(auctionId, ...removedArtworks));
         }
 
-        // Fetch the current max lot number for the auction to determine the next lot number
+        // Fetch the current max lot order for the auction to determine the next lot order
         const { results: currentMax } = await context.env.DB.prepare(
-            `SELECT MAX(lotNumber) as maxLotNumber FROM lot WHERE auctionId = ?`
+            `SELECT MAX(lotOrder) as maxLotOrder FROM lot WHERE auctionId = ?`
         ).bind(auctionId).first();
         console.log(currentMax)
 
-        let nextLotNumber = (currentMax?.maxLotNumber || 0) + 1;
+        let nextLotOrder = (currentMax?.maxLotOrder || 0) + 1;
 
         // Add new artworks to the lot table
         if (addedArtworks.length > 0) {
             for (const artworkId of addedArtworks) {
-                const addStatement = `INSERT INTO lot (auctionId, lotNumber, artworkId) VALUES (?, ?, ?)`;
-                batchStatements.push(context.env.DB.prepare(addStatement).bind(auctionId, nextLotNumber++, artworkId));
+                const addStatement = `INSERT INTO lot (auctionId, lotOrder, artworkId) VALUES(?, ?, ?)`;
+                batchStatements.push(context.env.DB.prepare(addStatement).bind(auctionId, nextLotOrder++, artworkId));
             }
         }
 
