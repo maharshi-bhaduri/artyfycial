@@ -19,6 +19,7 @@ const Navbar = () => {
   // navigation config
   const navConfig = [
     { name: "Discover", path: "/discover" },
+    { name: "Marketplace", path: "/marketplace" },
     { name: "Studio", path: "/studio" },
     { name: "Auctions", path: "/auctions" },
     { name: "Account", path: "/account" },
@@ -61,7 +62,9 @@ const Navbar = () => {
   };
 
   const getLinkClass = (path) => {
-    return selectedOption === path ? "bg-black text-white animate-background-slide w-full" : "";
+    return selectedOption === path
+      ? "bg-black text-white animate-background-slide w-full"
+      : "";
   };
 
   return (
@@ -70,14 +73,25 @@ const Navbar = () => {
         className="md:hidden fixed bottom-4 right-4 z-20 py-2 px-3 bg-black text-white rounded-xl"
         onClick={toggleNavbar}
       >
-        {isOpen ? 'Close' : 'Menu'}
+        {isOpen ? "Close" : "Menu"}
       </button>
-      {isOpen && <div className="fixed inset-0 bg-black opacity-50 z-10" onClick={closeNavbar}></div>}
-      <nav className={`border-r border-gray-300 py-4 fixed h-full flex flex-col items-start z-20 bg-white transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-10"
+          onClick={closeNavbar}
+        ></div>
+      )}
+      <nav
+        className={`border-r border-gray-300 py-4 fixed h-full flex flex-col items-start z-20 bg-white transition-transform transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+      >
         <div className="flex flex-col justify-start items-start w-full">
           <div className="flex justify-between w-full">
-            <div className="text-gray-700 text-3xl font-serif px-4 mb-4 cursor-pointer hover:text-black"
-              onClick={() => handleNavigation({}, "/discover")}>
+            <div
+              className="text-gray-700 text-3xl font-serif px-4 mb-4 cursor-pointer hover:text-black"
+              onClick={(event) => handleNavigation(event, "/discover")}
+            >
               Artyfycial
             </div>
           </div>
@@ -85,7 +99,9 @@ const Navbar = () => {
             <a
               key={item.name}
               href="#"
-              className={`w-full text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300 ${getLinkClass(item.path)}`}
+              className={`w-full text-gray-700 hover:text-gray-400 px-4 py-2 transition-all duration-300 ${getLinkClass(
+                item.path
+              )}`}
               onClick={(event) => handleNavigation(event, item.path)}
             >
               {item.name}
