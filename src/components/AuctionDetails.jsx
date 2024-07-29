@@ -113,7 +113,7 @@ const AuctionDetails = () => {
                 onRequestClose={handleModalClose}
                 title="Select Artworks"
                 minHeight={'80vh'}
-                width={'400px'}
+                width={'500px'}
             >
                 <ArtworkSelectionModalContent
                     onArtworkSelect={handleArtworkSelect}
