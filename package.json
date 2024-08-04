@@ -12,6 +12,7 @@
   "dependencies": {
     "@codehelios/verify-tokenid": "^0.3.1",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "js-cookie": "^3.0.5",
@@ -21,7 +22,7 @@
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
-    "wrangler": "^3.59.0"
+    "styled-components": "^6.1.12"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
