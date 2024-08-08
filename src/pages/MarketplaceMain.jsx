@@ -4,11 +4,12 @@ import ArtworkDisplay from "../components/ArtworkDisplay";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import NumberInput from "../components/NumberInput";
-import { addBidToFirestore, fetchBidsRealtime } from "../utils/Firebase";
+import { addBidToFirestore } from "../utils/Firebase";
 function MarketplaceMain() {
   const artworkId = useParams();
   const location = useLocation();
   const artFromState = location.state?.art;
+
   const userId = useRef(localStorage.getItem("userId"));
   const [bids, setBids] = useState([]);
   const {
@@ -22,10 +23,10 @@ function MarketplaceMain() {
   );
 
   const [currentBid, setCurrentBid] = useState(art.valuation); // State for holding bids
-  useEffect(() => {
-    const unsub = fetchBidsRealtime(artworkId, setBids);
-    return () => unsub();
-  }, [artworkId]);
+  const handleBidChange = (newBid) => {
+    setCurrentBid(newBid);
+  };
+
   const fetchArtworkDetails = async (artworkId) => {
     try {
       const response = await axios.get(
@@ -39,27 +40,19 @@ function MarketplaceMain() {
     }
   };
 
-  const handleBidChange = (newBid) => {
-    setCurrentBid(newBid);
-  };
-  // const addBid = async (bidData) => {
-  //   const response = await axios.post(
-  //     `${import.meta.env.VITE_APP_POST_ADD_BID}`,
-  //     bidData
-  //   );
-  //   return response.data;
-  // };
-  const mutation = useMutation(addBidToFirestore, {
-    onSuccess: (data) => {
-      console.log("Bid data added successfully");
-    },
-    onError: (error) => {
-      console.log("Error submitting bid");
-    },
-  });
+  const mutation = useMutation(
+    (bidData) => addBidToFirestore(art.marketplaceItemId, bidData),
+    {
+      onSuccess: (data) => {
+        console.log("Bid data added successfully");
+      },
+      onError: (error) => {
+        console.log("Error submitting bid");
+      },
+    }
+  );
   const handleBidSubmission = () => {
     const bidData = {
-      parentRefId: art.marketplaceItemId,
       artworkId: art.artworkId,
       bidderId: userId.current,
       bidAmount: currentBid,

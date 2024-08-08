@@ -57,21 +57,27 @@ const signOutFn = function () {
 
 // // Firestore functions
 
-const addBidToFirestore = async (bidData) => {
-  await addDoc(collection(db, "bids"), {
-    ...bidData,
-    timestamp: serverTimestamp(),
-  });
+const addBidToFirestore = async (marketplaceItemId, bidData) => {
+  try {
+    const itemRef = doc(db, "items", marketplaceItemId.toString());
+    await addDoc(collection(itemRef, "bids"), {
+      ...bidData,
+      bidTime: serverTimestamp(),
+    });
+    console.log("Bid added successfully");
+  } catch (error) {
+    console.error("Error adding bid: ", error);
+  }
 };
 
-const fetchBidsRealtime = (arworkId, callback) => {
-  const bidsQuery =
-    (collection(db, "bids"), where("artworkId", "==", artworkId));
+const fetchBidsRealtime = (marketplaceItemId, callback) => {
+  const itemRef = doc(db, "items", marketplaceItemId.toString());
+  const bidsQuery = collection(itemRef, "bids");
   const unsub = onSnapshot(bidsQuery, (snapshot) => {
     const bids = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     callback(bids);
   });
-  return unsub();
+  return unsub;
 };
 
 export {

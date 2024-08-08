@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
-
+import { fetchBidsRealtime } from "../utils/Firebase";
 const MarketPlaceItem = ({ art }) => {
   const [isLoading, setIsLoading] = useState(true);
-
+  useEffect(() => {
+    const unsub = fetchBidsRealtime(art.marketplaceItemId, (bids) => {
+      console.log(bids);
+    });
+    return () => unsub();
+  }, [art.marketplaceItemId]);
   const handleImageLoad = () => {
     setIsLoading(false);
   };
