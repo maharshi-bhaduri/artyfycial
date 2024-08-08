@@ -6,8 +6,17 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import axios from "axios";
-
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  snapshotEqual,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -23,13 +32,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
 const signInWithGoogle = async function () {
   try {
     const res = await signInWithPopup(auth, provider);
     localStorage.setItem("token", res._tokenResponse.idToken);
     localStorage.setItem("uid", res.user.uid);
-
   } catch (error) {
     console.log(error);
   }
@@ -46,4 +55,37 @@ const signOutFn = function () {
     });
 };
 
-export { auth, provider, onAuthStateChanged, signOutFn, signInWithGoogle };
+// // Firestore functions
+
+const addBidToFirestore = async (marketplaceItemId, bidData) => {
+  try {
+    const itemRef = doc(db, "items", marketplaceItemId.toString());
+    await addDoc(collection(itemRef, "bids"), {
+      ...bidData,
+      bidTime: serverTimestamp(),
+    });
+    console.log("Bid added successfully");
+  } catch (error) {
+    console.error("Error adding bid: ", error);
+  }
+};
+
+const fetchBidsRealtime = (marketplaceItemId, callback) => {
+  const itemRef = doc(db, "items", marketplaceItemId.toString());
+  const bidsQuery = collection(itemRef, "bids");
+  const unsub = onSnapshot(bidsQuery, (snapshot) => {
+    const bids = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    callback(bids);
+  });
+  return unsub;
+};
+
+export {
+  auth,
+  provider,
+  onAuthStateChanged,
+  signOutFn,
+  signInWithGoogle,
+  fetchBidsRealtime,
+  addBidToFirestore,
+};

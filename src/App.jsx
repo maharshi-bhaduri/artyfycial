@@ -14,6 +14,7 @@ import Artist from "./pages/Artist";
 import AccountUpdate from "./pages/AccountUpdate";
 import AuctionMain from "./pages/AuctionMain";
 import Marketplace from "./pages/Marketplace";
+import MarketplaceMain from "./pages/MarketplaceMain";
 export default function App() {
   initializeLocalForage();
   const queryClient = new QueryClient();
@@ -62,6 +63,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <ArtworkMain />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/marketplace/:artworkId"
+                element={
+                  <ProtectedRoute>
+                    <MarketplaceMain />
                   </ProtectedRoute>
                 }
               />
