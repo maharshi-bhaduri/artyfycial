@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from './Loader';
+import CachedImage from './CachedImage';
 
 const fetchMoreArtworks = async (artistId, artworkId) => {
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_LIST}?artistId=${artistId}&current=${artworkId}`);
@@ -32,7 +33,7 @@ const Recommendation = ({ artistId, artworkId }) => {
                         className="border p-4 rounded-lg cursor-pointer"
                         onClick={() => navigate(`/artwork/${artwork.artworkId}`)}>
 
-                        <img src={artwork.url} alt={artwork.title} className="object-contain max-w-full rounded-lg max-h-48" />
+                        <CachedImage src={artwork.url} alt={artwork.title} className="object-contain max-w-full rounded-lg max-h-48" />
                         <h3 className="text-lg font-semibold">{artwork.title}</h3>
                     </div>
                 ))

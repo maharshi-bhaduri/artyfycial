@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CachedImage from "./CachedImage";
 
 const ImageGallery = () => {
     const [images, setImages] = useState([]);
@@ -23,7 +24,7 @@ const ImageGallery = () => {
         <div className="flex justify-end items-center">
             <div className="grid grid-cols-3 gap-8 px-16">
                 {images.map((file) => (
-                    <img
+                    <CachedImage
                         key={file.name}
                         src={file.url}
                         alt={file.name}

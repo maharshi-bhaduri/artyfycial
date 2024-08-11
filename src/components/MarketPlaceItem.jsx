@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import { fetchBidsRealtime } from "../utils/Firebase";
+import CachedImage from "./CachedImage";
 const MarketPlaceItem = ({ art }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -18,12 +19,11 @@ const MarketPlaceItem = ({ art }) => {
     <Link to={`/marketplace/${art.artworkId}`} state={{ art }} className="m-2">
       <div className="border border-gray-300 rounded-xl p-4 w-full">
         {isLoading && <Loader />}
-        <img
+        <CachedImage
           src={art.url}
           alt={art.title}
-          className={`w-full h-60 object-cover rounded-lg mb-2 ${
-            isLoading ? "hidden" : "block"
-          }`}
+          className={`w-full h-60 object-cover rounded-lg mb-2 ${isLoading ? "hidden" : "block"
+            }`}
           onLoad={handleImageLoad}
         />
         {!isLoading && (
