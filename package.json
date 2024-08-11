@@ -22,7 +22,8 @@
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
-    "styled-components": "^6.1.12"
+    "styled-components": "^6.1.12",
+    "wrangler": "^3.59.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
