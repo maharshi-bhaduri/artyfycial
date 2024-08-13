@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Loader from './Loader';
+import CachedImage from './CachedImage';
 
 const ArtworkDisplay = ({ art }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -11,7 +12,13 @@ const ArtworkDisplay = ({ art }) => {
     return (
         <div className="flex flex-col items-center justify-center">
             {isLoading && <Loader />}
-            <img
+            {/* <img
+                src={art.url}
+                alt={art.title}
+                className={`object-contain max-w-full min-w-[200px] max-h-[400px] ${isLoading ? 'hidden' : 'block'}`}
+                onLoad={handleImageLoad}
+            /> */}
+            <CachedImage
                 src={art.url}
                 alt={art.title}
                 className={`object-contain max-w-full min-w-[200px] max-h-[400px] ${isLoading ? 'hidden' : 'block'}`}

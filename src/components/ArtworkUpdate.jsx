@@ -6,6 +6,7 @@ import GenericModal from './GenericModal';
 import ConfirmDelete from './ConfirmDelete';
 import Loader from './Loader';
 import ConfirmationModal from './ConfirmationModal';
+import CachedImage from './CachedImage';
 
 const fetchArtworkDetails = async (artworkId) => {
     const response = await axios.get(`${import.meta.env.VITE_APP_GET_ARTWORK_DETAILS}?artworkId=${artworkId}`);
@@ -122,7 +123,12 @@ const ArtworkUpdate = () => {
                     <form onSubmit={handleSubmit}>
                         <div className="flex">
                             <div className="w-1/2">
-                                <img src={artworkDetails.url} alt="Artwork" className="object-contain max-w-full max-h-[400px]" />
+                                {/* <img src={artworkDetails.url} alt="Artwork" className="object-contain max-w-full max-h-[400px]" /> */}
+                                <CachedImage
+                                    src={artworkDetails.url}
+                                    alt="Artwork"
+                                    className="object-contain max-w-full max-h-[400px]"
+                                />
                             </div>
                             <div className="w-1/2 px-4">
                                 <input

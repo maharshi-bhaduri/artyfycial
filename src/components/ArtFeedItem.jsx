@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Loader from './Loader';
+import CachedImage from './CachedImage';
 
 const ArtFeedItem = ({ art }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +14,13 @@ const ArtFeedItem = ({ art }) => {
         <Link to={`/artwork/${art.artworkId}`} state={{ art }} className='m-2'>
             <div className="border border-gray-300 rounded-xl p-4 w-full">
                 {isLoading && <Loader />}
-                <img
+                {/* <img
+                    src={art.url}
+                    alt={art.title}
+                    className={`w-full h-60 object-cover rounded-lg mb-2 ${isLoading ? 'hidden' : 'block'}`}
+                    onLoad={handleImageLoad}
+                /> */}
+                <CachedImage
                     src={art.url}
                     alt={art.title}
                     className={`w-full h-60 object-cover rounded-lg mb-2 ${isLoading ? 'hidden' : 'block'}`}

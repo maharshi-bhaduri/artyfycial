@@ -3,6 +3,7 @@ import { useQuery, useQueryClient, useMutation } from 'react-query';
 import axios from 'axios';
 import Loader from './Loader';
 import { useParams } from 'react-router-dom';
+import CachedImage from './CachedImage';
 
 const fetchArtworks = async (searchQuery) => {
     const params = {
@@ -115,7 +116,12 @@ const ArtworkSelectionModalContent = ({ onArtworkSelect, initialSelected, onClos
                 {filteredArtworks.map((artwork) => (
                     <div key={artwork.artworkId} className={`border p-2 rounded-md ${(selectedArtworks.includes(artwork.artworkId) || (initialSelected.includes(artwork.artworkId) && !removedArtworks.includes(artwork.artworkId))) ? 'border-blue-500' : removedArtworks.includes(artwork.artworkId) ? 'border-red-500' : ''}`}>
                         <div className="aspect-w-1 aspect-h-1">
-                            <img src={artwork.url}
+                            {/* <img src={artwork.url}
+                                alt={artwork.title}
+                                className="object-cover w-full h-full rounded"
+                            /> */}
+                            <CachedImage
+                                src={artwork.url}
                                 alt={artwork.title}
                                 className="object-cover w-full h-full rounded"
                             />
