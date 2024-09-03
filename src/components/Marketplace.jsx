@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
-import MarketPlaceItem from "../components/MarketPlaceItem";
+import MarketPlaceItem from "./MarketPlaceItem";
 
 const getMarketPlace = async function () {
   //first get the list of items on the marketplace, then get their corresponding photos
@@ -36,7 +36,7 @@ const Marketplace = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {marketPlaceData.map((marketPlaceItem) => (
           <MarketPlaceItem
-            key={marketPlaceItem.artworkId}
+            key={marketPlaceItem.marketplaceItemId}
             art={marketPlaceItem}
           />
         ))}
