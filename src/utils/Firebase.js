@@ -6,17 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  onSnapshot,
-  updateDoc,
-  collection,
-  addDoc,
-  serverTimestamp,
-  snapshotEqual,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -56,20 +46,6 @@ const signOutFn = function () {
 };
 
 // // Firestore functions
-
-const addBidToFirestore = async (marketplaceItemId, bidData) => {
-  try {
-    const itemRef = doc(db, "items", marketplaceItemId.toString());
-    await addDoc(collection(itemRef, "bids"), {
-      ...bidData,
-      bidTime: serverTimestamp(),
-    });
-    console.log("Bid added successfully");
-  } catch (error) {
-    console.error("Error adding bid: ", error);
-  }
-};
-
 const fetchBidsRealtime = (marketplaceItemId, callback) => {
   const itemRef = doc(db, "items", marketplaceItemId.toString());
   const bidsQuery = collection(itemRef, "bids");
@@ -79,13 +55,12 @@ const fetchBidsRealtime = (marketplaceItemId, callback) => {
   });
   return unsub;
 };
-
 export {
   auth,
   provider,
   onAuthStateChanged,
   signOutFn,
   signInWithGoogle,
+  db,
   fetchBidsRealtime,
-  addBidToFirestore,
 };

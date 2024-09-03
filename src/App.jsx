@@ -13,7 +13,6 @@ import Account from "./pages/Account";
 import Artist from "./pages/Artist";
 import AccountUpdate from "./pages/AccountUpdate";
 import AuctionMain from "./pages/AuctionMain";
-import Marketplace from "./pages/Marketplace";
 import MarketplaceMain from "./pages/MarketplaceMain";
 export default function App() {
   initializeLocalForage();
@@ -50,14 +49,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               ></Route>
-              <Route
-                path="/marketplace"
-                element={
-                  <ProtectedRoute>
-                    <Marketplace />
-                  </ProtectedRoute>
-                }
-              ></Route>
+
               <Route
                 path="/artwork/:artworkId/*"
                 element={
@@ -67,7 +59,7 @@ export default function App() {
                 }
               />
               <Route
-                path="/marketplace/:artworkId"
+                path="/marketplace/*"
                 element={
                   <ProtectedRoute>
                     <MarketplaceMain />
